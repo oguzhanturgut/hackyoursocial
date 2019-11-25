@@ -7,6 +7,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   ACCOUNT_DELETED,
+  CONFIRM_EMAIL,
 } from '../actions/types';
 
 const initialState = {
@@ -34,6 +35,7 @@ export default function(state = initialState, action) {
         loading: false,
       };
     case LOGIN_SUCCESS:
+    case CONFIRM_EMAIL:
       localStorage.setItem('token', payload.token);
       return {
         ...state,
