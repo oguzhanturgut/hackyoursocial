@@ -99,4 +99,30 @@ router.post(
   },
 );
 
+// @route   PUT /api/users/confirm/:emailToken
+// @desc    Confirm user email
+// @access  Public
+router.put('/confirm/:emailToken', async (req, res) => {
+  const { emailToken } = req.params;
+  try {
+    const {
+      user: { id },
+    } = jwt.verify(emailToken, config.get('emailSecret'));
+    await User.findOneAndUpdate({ _id: id }, { $set: { confirmed: true } }, { new: true });
+    // TODO handle error cases
+    const payload = {
+      user: {
+        id,
+      },
+    };
+
+    jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 999999 }, (err, token) => {
+      if (err) throw err;
+      res.json({ token });
+    });
+  } catch (error) {
+    return res.status(401).send({ msg: 'Invalid Token' });
+  }
+});
+
 module.exports = router;
