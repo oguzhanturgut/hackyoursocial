@@ -8,9 +8,10 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_PROFILE
+  CLEAR_PROFILE,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
+import firebase from 'firebase/app';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -23,11 +24,11 @@ export const loadUser = () => async dispatch => {
 
     dispatch({
       type: USER_LOADED,
-      payload: res.data
+      payload: res.data,
     });
   } catch (err) {
     dispatch({
-      type: AUTH_ERROR
+      type: AUTH_ERROR,
     });
   }
 };
@@ -36,8 +37,8 @@ export const loadUser = () => async dispatch => {
 export const register = ({ name, email, password }) => async dispatch => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   const body = JSON.stringify({ name, email, password });
@@ -47,7 +48,7 @@ export const register = ({ name, email, password }) => async dispatch => {
 
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: res.data
+      payload: res.data,
     });
 
     dispatch(loadUser());
@@ -59,7 +60,7 @@ export const register = ({ name, email, password }) => async dispatch => {
     }
 
     dispatch({
-      type: REGISTER_FAIL
+      type: REGISTER_FAIL,
     });
   }
 };
@@ -68,8 +69,8 @@ export const register = ({ name, email, password }) => async dispatch => {
 export const login = (email, password) => async dispatch => {
   const config = {
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   const body = JSON.stringify({ email, password });
@@ -79,7 +80,7 @@ export const login = (email, password) => async dispatch => {
 
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: res.data
+      payload: res.data,
     });
 
     dispatch(loadUser());
@@ -91,7 +92,48 @@ export const login = (email, password) => async dispatch => {
     }
 
     dispatch({
-      type: LOGIN_FAIL
+      type: LOGIN_FAIL,
+    });
+  }
+};
+
+// Login User with social
+export const loginWithSocial = () => async dispatch => {
+  console.log('facebook');
+
+  const provider = new firebase.auth.FacebookAuthProvider();
+
+  const auth = firebase.auth();
+
+  try {
+    const userToken = await firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(function(result) {
+        const token = result.credential.accessToken;
+        const user = result.user;
+        console.log(user.displayName);
+        return token;
+      });
+    console.log(userToken);
+
+    console.log('different try');
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: auth.currentUser,
+    });
+
+    // dispatch(loadUser());
+  } catch (err) {
+    // const errors = err.response.data.errors;
+
+    // if (errors) {
+    //   errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    // }
+
+    dispatch({
+      type: LOGIN_FAIL,
     });
   }
 };
