@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert';
+
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -99,38 +100,43 @@ export const login = (email, password) => async dispatch => {
 
 // Login User with social
 export const loginWithSocial = () => async dispatch => {
-  console.log('facebook');
-
   const provider = new firebase.auth.FacebookAuthProvider();
 
-  const auth = firebase.auth();
-
   try {
-    const userToken = await firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(function(result) {
-        const token = result.credential.accessToken;
-        const user = result.user;
-        console.log(user.displayName);
-        return token;
-      });
-    console.log(userToken);
+    const result = await firebase.auth().signInWithPopup(provider);
 
-    console.log('different try');
+    const { email, displayName, uid } = result.user;
+    const { accessToken } = result.credential;
+    console.log(result);
 
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: auth.currentUser,
+    // const body = { displayName, email };
+    // const res = await axios.post('/api/users', body, config);
+    // console.log(res.data);
+
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: {
+            token: accessToken,
+            user: {
+              _id: uid,
+              name: displayName,
+              email: email,
+              date: Date.now,
+            },
+          },
+        });
+
+        // dispatch(loadUser());
+      }
     });
-
-    // dispatch(loadUser());
   } catch (err) {
-    // const errors = err.response.data.errors;
+    const errors = err.response.data.errors;
 
-    // if (errors) {
-    //   errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    // }
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
 
     dispatch({
       type: LOGIN_FAIL,
@@ -138,7 +144,7 @@ export const loginWithSocial = () => async dispatch => {
   }
 };
 
-// Logout / Clear Profile
+// Logout / Clear profile
 export const logout = () => dispatch => {
   dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
