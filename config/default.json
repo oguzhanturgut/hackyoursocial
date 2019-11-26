@@ -1,6 +1,6 @@
 {
-  "mongoURI": "",
-  "jwtSecret": "secret",
-  "githubClientId": "",
-  "githubSecret": ""
+  "mongoURI": "mongodb+srv://Shyar:shiyar-baravi@connecter-zulu0.azure.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "shyar_jwt",
+  "githubClientId": "Iv1.2681987686c204ee",
+  "githubSecret": "78fcff3f8317400bec1031155a7ad9cb577152b3"
 }
