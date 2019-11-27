@@ -98,8 +98,9 @@ export const login = (email, password) => async dispatch => {
 // Confirm email
 export const confirmEmail = token => async dispatch => {
   try {
-    const response = await axios.put(`/api/users/confirm/${token}`);
-    dispatch({ type: CONFIRM_EMAIL, payload: response.data });
+    const res = await axios.put(`/api/users/confirm/${token}`);
+    if (res.data.msg) dispatch(setAlert(res.data.msg, 'success'));
+    dispatch({ type: CONFIRM_EMAIL, payload: res.data });
     dispatch(loadUser());
   } catch (error) {
     const { errors } = error.response.data;
@@ -107,6 +108,27 @@ export const confirmEmail = token => async dispatch => {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
     dispatch({ type: LOGIN_FAIL });
+    return errors && errors[0].msg;
+  }
+};
+
+// Resend email
+export const resendEmail = email => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({ email });
+  try {
+    const res = await axios.post('/api/users/resend', body, config);
+    dispatch(setAlert(res.data.msg, 'success'));
+  } catch (error) {
+    const { errors } = error.response.data;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
   }
 };
 

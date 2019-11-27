@@ -84,14 +84,8 @@ router.post(
         <a href=${confirmURL}>${confirmURL}</a>`,
       };
 
-      const result = await transporter.sendMail(msg);
-      // console.log(result);
+      await transporter.sendMail(msg);
       res.json({ msg: 'Confirmation mail sent' });
-
-      // jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
-      //   if (err) throw err;
-      //   res.json({ token });
-      // });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
@@ -108,21 +102,85 @@ router.put('/confirm/:emailToken', async (req, res) => {
     const {
       user: { id },
     } = jwt.verify(emailToken, config.get('emailSecret'));
+    const user = await User.findOne({ _id: id });
+    let msg = '';
+    if (user.confirmed) {
+      msg = 'Email is already confirmed';
+    }
     await User.findOneAndUpdate({ _id: id }, { $set: { confirmed: true } }, { new: true });
-    // TODO handle error cases
     const payload = {
       user: {
         id,
       },
     };
 
-    jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 999999 }, (err, token) => {
+    jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
       if (err) throw err;
-      res.json({ token });
+      res.json({ token, msg });
     });
   } catch (error) {
-    return res.status(401).send({ msg: 'Invalid Token' });
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).send({ errors: [{ msg: 'Email validation link expired' }] });
+    } else {
+      return res.status(401).send({ errors: [{ msg: 'Invalid Token' }] });
+    }
   }
 });
+
+// @route   POST   /api/users/resend
+// @desc    Resend confirmation email
+// @access  Public
+router.post(
+  '/resend',
+  [check('email', 'Please include a valid email').isEmail()],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const { email } = req.body;
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: `No user found registered with ${email}` }] });
+      }
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      const transporter = nodemailer.createTransport({
+        host: 'smtp-pulse.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS,
+        },
+      });
+
+      const emailToken = jwt.sign(payload, config.get('emailSecret'), { expiresIn: '1d' });
+      const confirmURL = `${HOST_ADDR}/confirm/${emailToken}`;
+
+      const msg = {
+        to: user.email,
+        from: process.env.MAIL_USER,
+        subject: 'Confirm Email',
+        html: `Hurrah! You've created a Developer Hub account with ${user.email}. Please take a moment to confirm that we can use this address to send you mails. <br/>
+        <a href=${confirmURL}>${confirmURL}</a>`,
+      };
+
+      await transporter.sendMail(msg);
+      res.json({ msg: 'Confirmation mail sent' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  },
+);
 
 module.exports = router;
