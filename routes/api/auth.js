@@ -85,8 +85,9 @@ router.post(
   }
 );
 
-// password forgot and reset routes**************
-// password forgot and reset routes*************
+// @route    PUT api/auth/forgot-password
+// @desc     Send Password Recovery Email
+// @access   Public
 router.put(
   "/forgot-password",
   [check("email", "Please include a valid email").isEmail()],
@@ -98,19 +99,14 @@ router.put(
 
     const { email } = req.body;
 
-    // find the user in our database based on email
     User.findOne({ email }, (err, user) => {
-      // if err or no user
       if (err || !user)
         return res.status("401").json({
           error: "User with that email does not exist!"
         });
 
-      // generate a token with user id and secret
       const token = jwt.sign({ _id: user._id }, config.get("jwtSecret"));
-      // res.json({ user, token });
 
-      // email data
       const resetPwUrl = `${HOST_ADDR}/reset-password/${token}`;
       const emailData = {
         from: process.env.MAIL_USER || config.get("email"),
@@ -134,7 +130,9 @@ router.put(
   }
 );
 
-// ***
+// @route    PUT api/auth/reset-password
+// @desc     Reset Password When The User Click The received Link
+// @access   Public
 router.put(
   "/reset-password",
   [
@@ -148,18 +146,17 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    //  in the frontend we have to use ReactRouterDom to get the resetPasswordLink from the url and push it to the body
 
     try {
       const { resetPasswordLink, newPassword } = req.body;
 
       let user = await User.findOne({ resetPasswordLink });
-      // if  Not the user
+
       if (!user)
         return res.status("401").json({
           error: "Invalid Link!"
         });
-      // there is a user
+
       const salt = await bcrypt.genSalt(10);
       const newPasswordCrypt = await bcrypt.hash(newPassword, salt);
       user = await User.findOneAndUpdate(
