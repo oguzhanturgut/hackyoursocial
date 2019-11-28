@@ -114,7 +114,7 @@ router.put(
       // res.json({ user, token });
 
       // email data
-      const resetPwUrl = `${HOST_ADDR}/api/auth/reset-password/${token}`;
+      const resetPwUrl = `${HOST_ADDR}/reset-password/${token}`;
       const emailData = {
         from: process.env.MAIL_USER || config.get('email'),
         to: email,
@@ -153,8 +153,10 @@ router.put(
       return res.status(400).json({ errors: errors.array() });
     }
     //  in the frontend we have to use ReactRouterDom to get the resetPasswordLink from the url and push it to the body
-    const { resetPasswordLink, newPassword } = req.body;
+
     try {
+      const { resetPasswordLink, newPassword } = req.body;
+      console.log(resetPasswordLink, newPassword);
       let user = await User.findOne({ resetPasswordLink });
       // if  Not the user
       if (!user)
