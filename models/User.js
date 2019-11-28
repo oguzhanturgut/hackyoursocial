@@ -18,6 +18,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  resetPasswordLink: { data: String, default: '' },
   avatar: {
     type: String,
   },
