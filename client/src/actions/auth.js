@@ -13,6 +13,7 @@ import {
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import firebase from 'firebase/app';
+import { Mongoose } from 'mongoose';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -44,6 +45,7 @@ export const register = ({ name, email, password }) => async dispatch => {
 
   const body = JSON.stringify({ name, email, password });
 
+  console.log(body);
   try {
     const res = await axios.post('/api/users', body, config);
 
@@ -98,6 +100,8 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
+// Register User with Social
+
 // Login User with social
 export const loginWithSocial = () => async dispatch => {
   const provider = new firebase.auth.FacebookAuthProvider();
@@ -109,37 +113,36 @@ export const loginWithSocial = () => async dispatch => {
     const { accessToken } = result.credential;
     console.log(result);
 
-    // const body = { displayName, email };
-    // const res = await axios.post('/api/users', body, config);
-    // console.log(res.data);
+    // Register user with facebook data
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
 
-    firebase.auth().onAuthStateChanged(user => {
+    const body = JSON.stringify({ name: displayName, email: email, password: uid });
+
+    const res = await axios.post('/api/users', body, config);
+
+    dispatch({
+      type: REGISTER_SUCCESS,
+      payload: res.data,
+    });
+
+    // dispatch(loadUser());
+    console.log('user sent to database');
+
+    firebase.auth().onAuthStateChanged(async user => {
       if (user) {
-        dispatch({
-          type: REGISTER_SUCCESS,
-          payload: {
-            token: accessToken,
-          },
-        });
+        // dispatch({
+        //   type: LOGIN_SUCCESS,
+        //   payload: {
+        //     token: accessToken,
+        //   },
+        // });
+        console.log('this is a facebook user');
 
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: {
-            token: accessToken,
-          },
-        });
-
-        dispatch({
-          type: USER_LOADED,
-          payload: {
-            _id: uid,
-            name: displayName,
-            email: email,
-            date: Date.now,
-          },
-        });
-
-        // dispatch(loadUser());
+        dispatch(loadUser());
       }
     });
   } catch (err) {
