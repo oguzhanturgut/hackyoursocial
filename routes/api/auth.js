@@ -31,7 +31,7 @@ router.post(
   '/',
   [
     check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Password is required').exists(),
+    check('password', 'Password is required').exists()
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -45,33 +45,44 @@ router.post(
       let user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
       if (!user.confirmed)
-        return res.status(400).json({ errors: [{ msg: 'Please confirm your email to login' }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Please confirm your email to login' }] });
 
       const payload = {
         user: {
-          id: user.id,
-        },
+          id: user.id
+        }
       };
 
-      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      });
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }
-  },
+  }
 );
 
 // password forgot and reset routes**************
@@ -103,9 +114,9 @@ router.put(
       // res.json({ user, token });
 
       // email data
-      const resetPwUrl=`${HOST_ADDR}/api/auth/reset-password/${token}`
+      const resetPwUrl = `${HOST_ADDR}/api/auth/reset-password/${token}`;
       const emailData = {
-        from: 'a2neverever@gmail.com',
+        from: process.env.MAIL_USER || config.get('email'),
         to: email,
         subject: 'Password Reset Instructions',
         text: `Please use the following link to reset your password: ${resetPwUrl}`,
