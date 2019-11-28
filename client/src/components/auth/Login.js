@@ -3,7 +3,10 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login, loginWithSocial } from '../../actions/auth';
 import PropTypes from 'prop-types';
-import firebase from '../../social-config/firebaseConfig';
+
+// if I remove import firebaseApp somehow login button doesn't work. Is it because I initialize firebase in firebaseConfig and you have to import it somewhere?
+import firebaseApp from '../../social-config/firebaseConfig';
+import firebase from 'firebase';
 
 const Login = ({ login, isAuthenticated, loginWithSocial }) => {
   const [formData, setFormData] = useState({
@@ -56,7 +59,9 @@ const Login = ({ login, isAuthenticated, loginWithSocial }) => {
         <input type="submit" className="btn btn-primary" value="Login" />
       </form>
       {isAuthenticated ? <div>{firebase.auth().currentUser.displayName}</div> : <div></div>}
-      <button onClick={() => loginWithSocial()}>Login with Facebook</button>
+      <button className="btn" onClick={() => loginWithSocial()}>
+        Login with Facebook
+      </button>
       <p className="my-1">
         Don't have an account? <Link to="/register">Sign Up</Link>
       </p>

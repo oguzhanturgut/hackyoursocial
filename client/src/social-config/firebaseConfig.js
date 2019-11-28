@@ -13,6 +13,7 @@ const firebaseConfig = {
   measurementId: '',
 };
 
-firebase.initializeApp(firebaseConfig);
+// Could not remove this into another file it breaks the code
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-export default { firebase, firebaseConfig };
+export default { firebaseApp, firebaseConfig };

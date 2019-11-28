@@ -116,15 +116,26 @@ export const loginWithSocial = () => async dispatch => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         dispatch({
+          type: REGISTER_SUCCESS,
+          payload: {
+            token: accessToken,
+          },
+        });
+
+        dispatch({
           type: LOGIN_SUCCESS,
           payload: {
             token: accessToken,
-            user: {
-              _id: uid,
-              name: displayName,
-              email: email,
-              date: Date.now,
-            },
+          },
+        });
+
+        dispatch({
+          type: USER_LOADED,
+          payload: {
+            _id: uid,
+            name: displayName,
+            email: email,
+            date: Date.now,
           },
         });
 
