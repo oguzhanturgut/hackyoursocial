@@ -1,10 +1,11 @@
-import React, { Fragment, useState } from 'react';
-import axios from 'axios';
-import { setAlert } from '../../actions/alert';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { Fragment, useState } from "react";
+import axios from "axios";
+import { Redirect } from "react-router-dom";
+import { setAlert } from "../../actions/alert";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const PasswordEmailForm = ({ setAlert }) => {
+const PasswordEmailForm = ({ setAlert, isAuthenticated }) => {
   const [formData, setFormData] = useState({});
   const [sent, setSent] = useState(false);
 
@@ -16,7 +17,7 @@ const PasswordEmailForm = ({ setAlert }) => {
       //  send email
       const reqConfig = {
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json"
         }
       };
 
@@ -30,44 +31,53 @@ const PasswordEmailForm = ({ setAlert }) => {
   };
   if (sent) {
     // return <Redirect to='/login' />;
-    setAlert('Email sent', 'success');
+    setAlert("Email sent", "success");
 
     return (
       <Fragment>
-        <h1 className="large text-primary">Rest password emial is sent.</h1>
-        <p className="lead">
-          <i className="fas fa-mail"></i> Check your emial: {formData.email}
+        <h1 className='large text-primary'>Rest password emial is sent.</h1>
+        <p className='lead'>
+          <i className='fas fa-mail'></i> Check your emial: {formData.email}
         </p>
       </Fragment>
     );
   }
 
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
+
   return (
     <Fragment>
-      <h1 className="large text-primary">Forgot Password</h1>
-      <p className="lead">
-        <i className="fas fa-user" /> Input Your Email And Submit To Send
+      <h1 className='large text-primary'>Forgot Password</h1>
+      <p className='lead'>
+        <i className='fas fa-user' /> Input Your Email And Submit To Send
         Recovery Email
       </p>
-      <form className="form" onSubmit={e => onSubmit(e)}>
-        <div className="form-group">
+      <form className='form' onSubmit={e => onSubmit(e)}>
+        <div className='form-group'>
           <input
-            type="email"
-            placeholder="Email Address"
-            name="email"
+            type='email'
+            placeholder='Email Address'
+            name='email'
             onChange={e => onChange(e)}
             required
           />
         </div>
 
-        <input type="submit" className="btn btn-primary" value="Send" />
+        <input type='submit' className='btn btn-primary' value='Send' />
       </form>
     </Fragment>
   );
 };
 
 PasswordEmailForm.propTypes = {
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 };
 
-export default connect(null, { setAlert })(PasswordEmailForm);
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { setAlert })(PasswordEmailForm);

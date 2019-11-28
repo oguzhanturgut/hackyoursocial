@@ -6,7 +6,7 @@ import axios from "axios";
 import { setAlert } from "../../actions/alert";
 import PropTypes from "prop-types";
 
-const PasswordReset = ({ match, setAlert }) => {
+const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     password: "",
     password2: ""
@@ -76,6 +76,10 @@ const PasswordReset = ({ match, setAlert }) => {
     );
   }
 
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
+
   return (
     <Fragment>
       <h1 className='large text-primary'>Reset Password</h1>
@@ -110,7 +114,12 @@ const PasswordReset = ({ match, setAlert }) => {
 
 PasswordReset.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  match: PropTypes.object.isRequired
+  match: PropTypes.object.isRequired,
+  isAuthenticated: PropTypes.bool
 };
 
-export default connect(null, { setAlert })(PasswordReset);
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { setAlert })(PasswordReset);
