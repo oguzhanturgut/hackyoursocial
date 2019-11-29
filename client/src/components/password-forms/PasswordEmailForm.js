@@ -1,13 +1,16 @@
-import React, { Fragment, useState } from 'react';
-import axios from 'axios';
-import { Redirect } from 'react-router-dom';
-import { setAlert } from '../../actions/alert';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { Fragment, useState } from "react";
+import axios from "axios";
+import { Redirect } from "react-router-dom";
+import { setAlert } from "../../actions/alert";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import Spinner from "../layout/Spinner";
+
 
 const PasswordEmailForm = ({ setAlert, isAuthenticated }) => {
   const [formData, setFormData] = useState({});
   const [sent, setSent] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const onChange = e => setFormData({ ...formData, email: e.target.value });
   const onSubmit = async e => {
@@ -23,8 +26,10 @@ const PasswordEmailForm = ({ setAlert, isAuthenticated }) => {
 
       const reqBody = JSON.stringify({ email: formData.email });
 
-      const res = await axios.put(`/api/auth/forgot-password`, reqBody, reqConfig);
+      setShowSpinner(true);
+      await axios.put(`/api/auth/forgot-password/`, reqBody, reqConfig);
       setAlert(res.data.msg, 'success');
+      setShowSpinner(false);
       setSent(true);
     } catch (err) {
       console.error(err);
@@ -34,7 +39,26 @@ const PasswordEmailForm = ({ setAlert, isAuthenticated }) => {
       }
     }
   };
+
+
   if (sent) {
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
+// TODO There is something wrong with this logic
+  if (!sent && showSpinner) {
+    return (
+      <Fragment>
+        <p className='my-1'>Sending mail, please wait... </p>
+        <p>
+          <Spinner />
+        </p>
+      </Fragment>
+    );
+  }
+
+  if (sent && !showSpinner) {
+
     return (
       <Fragment>
         <h1 className='large text-primary'>Reset password email is sent.</h1>
@@ -43,10 +67,6 @@ const PasswordEmailForm = ({ setAlert, isAuthenticated }) => {
         </p>
       </Fragment>
     );
-  }
-
-  if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
   }
 
   return (

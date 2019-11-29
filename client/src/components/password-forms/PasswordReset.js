@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { setAlert } from '../../actions/alert';
 import PropTypes from 'prop-types';
+import Spinner from '../layout/Spinner';
 
 const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
 
   const { password, password2 } = formData;
   const [redirect, setRedirect] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
   const [resetError, setResetError] = useState(false);
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,8 +38,9 @@ const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
           resetPasswordLink,
           newPassword: formData.password,
         });
-
+        setShowSpinner(true);
         await axios.put(`/api/auth/reset-password`, reqBody, reqConfig);
+        setShowSpinner(false);
         setRedirect(true);
       } catch (err) {
         console.error(err.message);
@@ -46,6 +49,10 @@ const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
       }
     }
   };
+
+  if (isAuthenticated) {
+    return <Redirect to='/dashboard' />;
+  }
 
   if (resetError) {
     return (
@@ -61,10 +68,30 @@ const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
   if (redirect) {
     setAlert(`Password Reset success`, 'success');
     return <Redirect to='/login' />;
-  }
 
-  if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
+    //TODO Commented out new Spinner feature not to get conflicted.
+    //TODO redirection is now working
+
+    // if (!redirect && showSpinner) {
+    //   return (
+    //     <Fragment>
+    //       <p className='my-1'>Resetting Password, please wait... </p>
+    //       <p>
+    //         <Spinner />
+    //       </p>
+    //     </Fragment>
+    //   );
+    // }
+    // if (redirect && !showSpinner) {
+    //   setAlert(`Password Reset success`, "success");
+    //   return (
+    //     <p className='my-1'>
+    //       Password Reset Success{" "}
+    //       <Link to='/login' className='btn btn-primary'>
+    //         Login
+    //       </Link>
+    //     </p>
+    //   );
   }
 
   return (
