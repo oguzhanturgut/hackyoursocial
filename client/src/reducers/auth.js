@@ -8,6 +8,7 @@ import {
   LOGOUT,
   ACCOUNT_DELETED,
   SOCIAL_SUCCESS,
+  SOCIAL_USER_LOADED,
 } from '../actions/types';
 
 const initialState = {
@@ -28,6 +29,13 @@ export default function(state = initialState, action) {
         loading: false,
         user: payload,
       };
+    case SOCIAL_USER_LOADED:
+      return {
+        ...state,
+        isAuthenticated: true,
+        loading: false,
+        user: payload,
+      };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem('token', payload.token);
@@ -38,10 +46,10 @@ export default function(state = initialState, action) {
         loading: false,
       };
     case SOCIAL_SUCCESS:
-      localStorage.setItem('token', payload.token);
       return {
         ...state,
         ...payload,
+        token: payload.password,
         isAuthenticated: true,
         loading: false,
       };

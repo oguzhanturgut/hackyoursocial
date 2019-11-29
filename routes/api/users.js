@@ -75,26 +75,29 @@ router.post(
 // @desc     Register user
 // @access   Public
 router.post('/facebook', async (req, res) => {
-  const { name, email, avatar } = req.body.user;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  const { name, email, avatar, password } = req.body;
 
   try {
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
     }
+
     user = new User({
       name,
       email,
       avatar,
+      password,
     });
-    res.json({ user: { name, email, avatar } });
     await user.save();
+    res.json({ password });
   } catch (err) {
-    const errors = err.response.data.errors;
-
-    if (errors) {
-      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-    }
+    console.error(err.message);
+    res.status(500).send('Server error');
   }
 });
 

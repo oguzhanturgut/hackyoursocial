@@ -23,3 +23,4 @@ export const ADD_POST = 'ADD_POST';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const SOCIAL_SUCCESS = 'SOCIAL_SUCCESS';
+export const SOCIAL_USER_LOADED = 'SOCIAL_USER_LOADED';
