@@ -7,7 +7,7 @@ import { setAlert } from '../../actions/alert';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 
-const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
+const PasswordReset = ({ match, setAlert }) => {
   const [formData, setFormData] = useState({
     password: '',
     password2: '',
@@ -44,15 +44,11 @@ const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
         setRedirect(true);
       } catch (err) {
         console.error(err.message);
-        setAlert('Password Reset Link Invalid', 'danger');
+        setAlert('Password reset link is invalid!', 'danger');
         setResetError(true);
       }
     }
   };
-
-  if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
-  }
 
   if (resetError) {
     return (
@@ -66,35 +62,13 @@ const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
   }
 
   if (redirect) {
-    setAlert(`Password Reset success`, 'success');
+    setAlert(`Password changed successfully!`, 'success');
     return <Redirect to='/login' />;
-
-    //TODO Commented out new Spinner feature not to get conflicted.
-    //TODO redirection is now working
-
-    // if (!redirect && showSpinner) {
-    //   return (
-    //     <Fragment>
-    //       <p className='my-1'>Resetting Password, please wait... </p>
-    //       <p>
-    //         <Spinner />
-    //       </p>
-    //     </Fragment>
-    //   );
-    // }
-    // if (redirect && !showSpinner) {
-    //   setAlert(`Password Reset success`, "success");
-    //   return (
-    //     <p className='my-1'>
-    //       Password Reset Success{" "}
-    //       <Link to='/login' className='btn btn-primary'>
-    //         Login
-    //       </Link>
-    //     </p>
-    //   );
   }
 
-  return (
+  return showSpinner ? (
+    <Spinner />
+  ) : (
     <Fragment>
       <h1 className='large text-primary'>Reset Password</h1>
       <p className='lead'>
@@ -129,11 +103,6 @@ const PasswordReset = ({ match, setAlert, isAuthenticated }) => {
 PasswordReset.propTypes = {
   setAlert: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
-  isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-});
-
-export default connect(mapStateToProps, { setAlert })(PasswordReset);
+export default connect(null, { setAlert })(PasswordReset);

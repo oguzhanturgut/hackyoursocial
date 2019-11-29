@@ -88,7 +88,11 @@ router.put(
     try {
       const user = await User.findOne({ email });
 
-      if (!user) return res.status(401).json({ errors: [{ msg: `No user found with ${email}` }] });
+      // To hide if the user is registered or not. (Social engineering attack)
+      if (!user)
+        res.json({
+          msg: `Email has been sent to ${email}. Follow the instructions to reset your password.`,
+        });
 
       const token = jwt.sign({ _id: user._id }, config.get('jwtSecret'));
 
