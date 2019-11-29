@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -10,10 +9,10 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_PROFILE,
+  SOCIAL_SUCCESS,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import firebase from 'firebase/app';
-import { Mongoose } from 'mongoose';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -100,54 +99,28 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
-// Register User with Social
+// Facebook Login User(in progress)
 
-// Login User with social
-export const loginWithSocial = () => async dispatch => {
-  const provider = new firebase.auth.FacebookAuthProvider();
+export const handleSocialLogin = (email, password) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({ email, password });
 
   try {
-    const result = await firebase.auth().signInWithPopup(provider);
-
-    const { email, displayName, uid } = result.user;
-    const { accessToken } = result.credential;
-    console.log(result);
-
-    // Register user with facebook data
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const body = JSON.stringify({ name: displayName, email: email, password: uid });
-
-    const res = await axios.post('/api/users', body, config);
+    const res = await axios.post('/api/auth', body, config);
 
     dispatch({
-      type: REGISTER_SUCCESS,
+      type: LOGIN_SUCCESS,
       payload: res.data,
     });
-
+    console.log(res);
     // dispatch(loadUser());
-    console.log('user sent to database');
-
-    firebase.auth().onAuthStateChanged(async user => {
-      if (user) {
-        // dispatch({
-        //   type: LOGIN_SUCCESS,
-        //   payload: {
-        //     token: accessToken,
-        //   },
-        // });
-        console.log('this is a facebook user');
-
-        dispatch(loadUser());
-      }
-    });
   } catch (err) {
     const errors = err.response.data.errors;
-
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
@@ -156,6 +129,35 @@ export const loginWithSocial = () => async dispatch => {
       type: LOGIN_FAIL,
     });
   }
+};
+
+// Facebook Register User
+export const handleLogin = accessToken => async dispatch => {
+  const provider = new firebase.auth.FacebookAuthProvider();
+  const result = await firebase.auth().signInWithPopup(provider);
+  console.log(result);
+  const _id = result.user.uid;
+  let name = result.user.displayName;
+  const avatar = result.user.providerData[0].photoURL;
+  // const date = result.user.metadata.creationTime;
+  const email = result.user.email;
+  const token = result.credential.accessToken;
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({ user: { _id, name, email, avatar } });
+  const res = await axios.post('/api/users/facebook', body, config);
+  const user = res;
+
+  dispatch({
+    type: SOCIAL_SUCCESS,
+    payload: { token, user },
+  });
+  // dispatch(loadUser());
 };
 
 // Logout / Clear profile

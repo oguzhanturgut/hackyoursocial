@@ -18,10 +18,7 @@ router.post(
       .not()
       .isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
-    check(
-      'password',
-      'Please enter a password with 6 or more characters'
-    ).isLength({ min: 6 })
+    check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -35,22 +32,20 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: 'User already exists' }] });
+        return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
       }
 
       const avatar = gravatar.url(email, {
         s: '200',
         r: 'pg',
-        d: 'mm'
+        d: 'mm',
       });
 
       user = new User({
         name,
         email,
         avatar,
-        password
+        password,
       });
 
       const salt = await bcrypt.genSalt(10);
@@ -61,24 +56,46 @@ router.post(
 
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
+      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      });
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }
-  }
+  },
 );
+
+// @route    POST api/users/facebook
+// @desc     Register user
+// @access   Public
+router.post('/facebook', async (req, res) => {
+  const { name, email, avatar } = req.body.user;
+
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+    }
+    user = new User({
+      name,
+      email,
+      avatar,
+    });
+    res.json({ user: { name, email, avatar } });
+    await user.save();
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+  }
+});
 
 module.exports = router;

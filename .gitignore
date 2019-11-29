@@ -4,4 +4,4 @@ config/production.json
 client/debug.log
 config/default.json
 package-lock.json
-
+client/src/social-config/
