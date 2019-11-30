@@ -1,6 +1,6 @@
 {
-  "mongoURI": "mongodb+srv://mergorgec:mergorgec@socialnetwork-5bjss.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "mysecrettoken",
-  "githubClientId": "d6bc2d7e856de04bbc4f",
-  "githubSecret": "1b1b8df16fc5a57148dab746dc892ce0de2668b2"
+  "mongoURI": "",
+  "jwtSecret": "",
+  "githubClientId": "",
+  "githubSecret": ""
 }

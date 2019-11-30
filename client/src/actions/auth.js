@@ -139,7 +139,7 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
-// Facebook Login User
+// Any Social Login User
 
 export const handleSocialLogin = (email, password) => async dispatch => {
   await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -174,7 +174,7 @@ export const handleSocialLogin = (email, password) => async dispatch => {
 };
 
 // Facebook Register User
-export const handleLogin = () => async dispatch => {
+export const handleLoginFacebook = () => async dispatch => {
   const provider = new firebase.auth.FacebookAuthProvider();
   const result = await firebase.auth().signInWithPopup(provider);
   console.log(result);
@@ -213,7 +213,7 @@ export const handleLogin = () => async dispatch => {
   }
 };
 
-// Facebook Register User
+// Google Register User
 export const handleLoginGoogle = () => async dispatch => {
   const provider = new firebase.auth.GoogleAuthProvider();
   const result = await firebase.auth().signInWithPopup(provider);
@@ -230,7 +230,7 @@ export const handleLoginGoogle = () => async dispatch => {
       'Content-Type': 'application/json',
     },
   };
-  console.log('pass' + password);
+
   const body = JSON.stringify({ name, email, avatar, password });
 
   try {
