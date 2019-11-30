@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { login } from '../../actions/auth';
+import { login, handleSocialLogin } from '../../actions/auth';
 import PropTypes from 'prop-types';
 
 // if I remove import firebaseApp somehow login button doesn't work. Is it because I initialize firebase in firebaseConfig and you have to import it somewhere?
@@ -21,6 +21,7 @@ const Login = ({ login, isAuthenticated }) => {
   const onSubmit = async e => {
     e.preventDefault();
     login(email, password);
+    handleSocialLogin(email, password);
   };
 
   // Redirect if logged in

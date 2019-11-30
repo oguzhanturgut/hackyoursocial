@@ -46,10 +46,10 @@ export default function(state = initialState, action) {
         loading: false,
       };
     case SOCIAL_SUCCESS:
+      localStorage.setItem('token', payload.token);
       return {
         ...state,
         ...payload,
-        token: payload.password,
         isAuthenticated: true,
         loading: false,
       };
