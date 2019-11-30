@@ -3,14 +3,14 @@ import * as firebase from 'firebase';
 // const settings = { timestampsInSnapshots: true };
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAIOjdj3MF7tlqCpU435u3ChU7E9t7FpoM',
-  authDomain: 'hyf-project-48ef4.firebaseapp.com',
-  databaseURL: 'https://hyf-project-48ef4.firebaseio.com',
-  projectId: 'hyf-project-48ef4',
-  storageBucket: 'hyf-project-48ef4.appspot.com',
-  messagingSenderId: '111507724756',
-  appId: '1:111507724756:web:a6d88666bc9fad05239e41',
-  measurementId: 'G-ZN6XZ9FDZE',
+  apiKey: 'AIzaSyDE8pABtUCH2kzGsN-htLQY8yDednivRiQ',
+  authDomain: 'ocean-d27d7.firebaseapp.com',
+  databaseURL: 'https://ocean-d27d7.firebaseio.com',
+  projectId: 'ocean-d27d7',
+  storageBucket: 'ocean-d27d7.appspot.com',
+  messagingSenderId: '732932278090',
+  appId: '1:732932278090:web:2f6389b5472052698663b3',
+  measurementId: 'G-3X88ZLXK9L',
 };
 
 // Could not remove this into another file it breaks the code

@@ -65,6 +65,9 @@ const Login = ({ login, isAuthenticated }) => {
       <Link to='/facebook' className='btn btn-light'>
         Facebook
       </Link>
+      <Link to='/google' className='btn btn-light'>
+        Google
+      </Link>
     </Fragment>
   );
 };

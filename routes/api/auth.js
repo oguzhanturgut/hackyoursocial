@@ -34,6 +34,19 @@ router.get('/facebook', auth, async (req, res) => {
   }
 });
 
+// @route    GET api/auth/google
+// @desc     Load user
+// @access   Public
+router.get('/google', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route    POST api/auth
 // @desc     Authenticate user & get token
 // @access   Public

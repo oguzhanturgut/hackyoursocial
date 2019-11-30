@@ -54,6 +54,26 @@ export const loadSocialUser = () => async dispatch => {
     });
   }
 };
+
+// Load Social User
+export const loadSocialUserGoogle = () => async dispatch => {
+  if (localStorage.token) {
+    setAuthToken(localStorage.token);
+  }
+  console.log(localStorage.token);
+  try {
+    const res = await axios.get('/api/auth/google');
+    console.log(res.data);
+    dispatch({
+      type: SOCIAL_USER_LOADED,
+      payload: res.data,
+    });
+  } catch (err) {
+    dispatch({
+      type: AUTH_ERROR,
+    });
+  }
+};
 // Register User
 export const register = ({ name, email, password }) => async dispatch => {
   const config = {
@@ -180,6 +200,46 @@ export const handleLogin = () => async dispatch => {
       payload: res.data,
     });
     dispatch(loadSocialUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: REGISTER_FAIL,
+    });
+  }
+};
+
+// Facebook Register User
+export const handleLoginGoogle = () => async dispatch => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  const result = await firebase.auth().signInWithPopup(provider);
+  console.log(result);
+  // const _id = result.user.uid;
+  let name = result.user.displayName;
+  const avatar = result.user.providerData[0].photoURL;
+  // const date = result.user.metadata.creationTime;
+  const email = result.user.email;
+  const password = result.user.uid;
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  console.log('pass' + password);
+  const body = JSON.stringify({ name, email, avatar, password });
+
+  try {
+    const res = await axios.post('/api/users/google', body, config);
+    dispatch({
+      type: SOCIAL_SUCCESS,
+      payload: res.data,
+    });
+    dispatch(loadSocialUserGoogle());
   } catch (err) {
     const errors = err.response.data.errors;
 
