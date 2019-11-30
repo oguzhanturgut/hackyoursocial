@@ -163,7 +163,7 @@ export const handleLogin = () => async dispatch => {
   const avatar = result.user.providerData[0].photoURL;
   // const date = result.user.metadata.creationTime;
   const email = result.user.email;
-  const password = result.credential.accessToken;
+  const password = result.user.uid;
 
   const config = {
     headers: {

@@ -83,8 +83,24 @@ router.post('/facebook', async (req, res) => {
 
   try {
     let user = await User.findOne({ email });
+
     if (user) {
-      return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
+      }
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      });
     }
 
     user = new User({
