@@ -1,35 +1,40 @@
-import React, { Fragment, useState } from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, { Fragment, useState } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 import {
   login,
   handleLoginFacebook,
-  handleLoginGoogle,
-  handleSocialLogin,
-} from '../../actions/auth';
-import PropTypes from 'prop-types';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import firebaseConfig from '../../social-config/firebaseConfig';
+  handleLoginGoogle
+} from "../../actions/auth";
+import PropTypes from "prop-types";
+import firebase from "firebase/app";
+import "firebase/auth";
+import firebaseConfig from "../../social-config/firebaseConfig";
 
-const Login = ({ login, isAuthenticated, handleLoginFacebook, handleLoginGoogle, accessToken }) => {
+const Login = ({
+  login,
+  isAuthenticated,
+  handleLoginFacebook,
+  handleLoginGoogle,
+  accessToken
+}) => {
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: ""
   });
 
   const { email, password } = formData;
 
-  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
     e.preventDefault();
     login(email, password);
-    handleSocialLogin(email, password);
   };
 
   // Redirect if logged in
@@ -70,17 +75,14 @@ const Login = ({ login, isAuthenticated, handleLoginFacebook, handleLoginGoogle,
       <p className="my-1">
         Don't have an account? <Link to="/register">Sign Up</Link>
       </p>
-      {/* <Link to='/facebook' className='btn btn-light'>
-        Facebook
-      </Link> */}
       <button className="btn" onClick={() => handleLoginFacebook(accessToken)}>
-        <i className="fab fa-facebook-f"></i> Login with Facebook
+        <i className="fab fa-facebook-f"></i> Sign In with Facebook
       </button>
-      {/* <Link to="/google" className="btn btn-light">
-        Google
-      </Link> */}
-      <button className="btn btn-email" onClick={() => handleLoginGoogle(accessToken)}>
-        <i className="fas fa-envelope"></i> Login with Gmail
+      <button
+        className="btn btn-email"
+        onClick={() => handleLoginGoogle(accessToken)}
+      >
+        <i className="fas fa-envelope"></i> Sign In with Google
       </button>
     </Fragment>
   );
@@ -90,18 +92,16 @@ login.propTypes = {
   login: PropTypes.func.isRequired,
   handleLoginFacebook: PropTypes.func.isRequired,
   handleLoginGoogle: PropTypes.func.isRequired,
-  handleSocialLogin: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool,
+  isAuthenticated: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
-  accessToken: state.auth.token,
+  accessToken: state.auth.token
 });
 
 export default connect(mapStateToProps, {
   login,
   handleLoginFacebook,
-  handleLoginGoogle,
-  handleSocialLogin,
+  handleLoginGoogle
 })(Login);
