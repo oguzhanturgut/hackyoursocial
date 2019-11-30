@@ -23,7 +23,7 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get('/api/auth');
-
+    console.log(res);
     dispatch({
       type: USER_LOADED,
       payload: res.data,
@@ -36,14 +36,14 @@ export const loadUser = () => async dispatch => {
 };
 
 // Load Social User
-export const loadSocialUser = password => async dispatch => {
+export const loadSocialUser = () => async dispatch => {
   if (localStorage.token) {
-    setAuthToken(password);
+    setAuthToken(localStorage.token);
   }
-
+  console.log(localStorage.token);
   try {
     const res = await axios.get('/api/auth/facebook');
-
+    console.log(res.data);
     dispatch({
       type: SOCIAL_USER_LOADED,
       payload: res.data,
@@ -119,44 +119,46 @@ export const login = (email, password) => async dispatch => {
   }
 };
 
-// Facebook Login User(in progress)
+// Facebook Login User
 
-// export const handleSocialLogin = (email, password) => async dispatch => {
-//   const config = {
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   };
+export const handleSocialLogin = (email, password) => async dispatch => {
+  await firebase.auth().signInWithEmailAndPassword(email, password);
 
-//   const body = JSON.stringify({ email, password });
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
 
-//   try {
-//     const res = await axios.post('/api/auth', body, config);
+  const body = JSON.stringify({ email, password });
 
-//     dispatch({
-//       type: LOGIN_SUCCESS,
-//       payload: res.data,
-//     });
-//     console.log(res);
-//     // dispatch(loadUser());
-//   } catch (err) {
-//     const errors = err.response.data.errors;
-//     if (errors) {
-//       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
-//     }
+  try {
+    const res = await axios.post('/api/auth', body, config);
 
-//     dispatch({
-//       type: LOGIN_FAIL,
-//     });
-//   }
-// };
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data,
+    });
+    console.log(res);
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+
+    dispatch({
+      type: LOGIN_FAIL,
+    });
+  }
+};
 
 // Facebook Register User
 export const handleLogin = () => async dispatch => {
   const provider = new firebase.auth.FacebookAuthProvider();
   const result = await firebase.auth().signInWithPopup(provider);
   console.log(result);
-  const _id = result.user.uid;
+  // const _id = result.user.uid;
   let name = result.user.displayName;
   const avatar = result.user.providerData[0].photoURL;
   // const date = result.user.metadata.creationTime;
@@ -168,16 +170,16 @@ export const handleLogin = () => async dispatch => {
       'Content-Type': 'application/json',
     },
   };
-
+  console.log('pass' + password);
   const body = JSON.stringify({ name, email, avatar, password });
+
   try {
     const res = await axios.post('/api/users/facebook', body, config);
-    console.log(res);
     dispatch({
       type: SOCIAL_SUCCESS,
       payload: res.data,
     });
-    dispatch(loadSocialUser(password));
+    dispatch(loadSocialUser());
   } catch (err) {
     const errors = err.response.data.errors;
 
