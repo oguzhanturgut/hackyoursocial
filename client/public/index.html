@@ -5,6 +5,15 @@
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
+    <!-- Safari compatilibility -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Developer Hub" />
+    <link rel="apple-touch-icon" href="developer-icon-144.png" />
+    <!-- IE compatilibility -->
+    <meta name="msapplication-TileImage" content="developer-icon-144.png" />
+    <meta name="msapplication-TileColor" content="#fff" />
+    <meta name="theme-color" content="#3f51b5" />
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
@@ -21,11 +30,12 @@
       rel="stylesheet"
     />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Welcome To Hack Your Social</title>
+    <title>Hack Your Social</title>
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <script src="swReg.js"></script>
   </body>
 </html>
