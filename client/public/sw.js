@@ -1,3 +1,9 @@
+const CACHE_VERSION = 3;
+const CURRENT_CACHES = {
+  static: `static-v${CACHE_VERSION}`,
+  dynamic: `dynamic-v${CACHE_VERSION}`,
+};
+
 self.addEventListener('install', e => {
   console.log('[SW] Installing sw', e);
   const urlsToPrefetch = [
@@ -17,7 +23,7 @@ self.addEventListener('install', e => {
     'https://use.fontawesome.com/releases/v5.8.1/webfonts/fa-brands-400.woff2',
   ];
   e.waitUntil(
-    caches.open('static-v1').then(cache => {
+    caches.open(CURRENT_CACHES.static).then(cache => {
       console.log('Pre-caching...');
       // Static Prefetching
       cache.addAll(urlsToPrefetch);
@@ -27,6 +33,18 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   console.log('[SW] Activating sw', e);
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.map(key => {
+          if (key !== CURRENT_CACHES.static && key !== CURRENT_CACHES.dynamic) {
+            console.log('[SW] Deleting old cache...');
+            return caches.delete(key);
+          }
+        }),
+      );
+    }),
+  );
   return self.clients.claim();
 });
 
@@ -38,7 +56,7 @@ self.addEventListener('fetch', e => {
       } else {
         // Dynamic Prefetching
         return fetch(e.request).then(response => {
-          return caches.open('dynamic-v1').then(cache => {
+          return caches.open(CURRENT_CACHES.dynamic).then(cache => {
             const cloneResponse = response.clone();
             cache.put(e.request.url, cloneResponse);
             return response;
