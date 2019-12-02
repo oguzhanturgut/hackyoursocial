@@ -9,7 +9,8 @@ self.addEventListener('install', e => {
   const urlsToPrefetch = [
     '/',
     '/index.html',
-    './static/media/showcase.4b31330b.jpg',
+    '/offline.html',
+    '/static/media/showcase.4b31330b.jpg',
     '/static/js/bundle.js',
     '/static/js/0.chunk.js',
     '/static/js/main.chunk.js',
@@ -55,13 +56,17 @@ self.addEventListener('fetch', e => {
         return response;
       } else {
         // Dynamic Prefetching
-        return fetch(e.request).then(response => {
-          return caches.open(CURRENT_CACHES.dynamic).then(cache => {
-            const cloneResponse = response.clone();
-            cache.put(e.request.url, cloneResponse);
-            return response;
+        return fetch(e.request)
+          .then(response => {
+            return caches.open(CURRENT_CACHES.dynamic).then(cache => {
+              const cloneResponse = response.clone();
+              cache.put(e.request.url, cloneResponse);
+              return response;
+            });
+          })
+          .catch(error => {
+            return caches.open(CURRENT_CACHES.static).then(cache => cache.match('/offline.html'));
           });
-        });
       }
     }),
   );
