@@ -2,7 +2,6 @@ self.addEventListener('install', e => {
   console.log('[SW] Installing sw', e);
   const urlsToPrefetch = [
     '/',
-    '/profiles',
     '/index.html',
     './static/media/showcase.4b31330b.jpg',
     '/static/js/bundle.js',
@@ -20,6 +19,7 @@ self.addEventListener('install', e => {
   e.waitUntil(
     caches.open('static-v1').then(cache => {
       console.log('Pre-caching...');
+      // Static Prefetching
       cache.addAll(urlsToPrefetch);
     }),
   );
@@ -36,7 +36,14 @@ self.addEventListener('fetch', e => {
       if (response) {
         return response;
       } else {
-        return fetch(e.request);
+        // Dynamic Prefetching
+        return fetch(e.request).then(response => {
+          return caches.open('dynamic-v1').then(cache => {
+            const cloneResponse = response.clone();
+            cache.put(e.request.url, cloneResponse);
+            return response;
+          });
+        });
       }
     }),
   );
