@@ -1,6 +1,7 @@
 {
-  "mongoURI": "",
+  "mongoURI": "mongodb+srv://adham123:adham123@devconnector-5ex4n.mongodb.net/test?retryWrites=true&w=majority",
   "jwtSecret": "secret",
-  "githubClientId": "",
-  "githubSecret": ""
+  "githubClientId": "4807401adfe078bad374",
+  "githubSecret": "6e069ffe38e4dd6fad7eb69c7d768e8b21dfad8d",
+  "local_url": "http://localhost:3000"
 }
