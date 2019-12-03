@@ -34,8 +34,8 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
             onChange={e => setSearchField(e.target.value)}
           />
           <div className="profiles">
-            {profiles.length > 0 ? (
-              profiles.map(profile => (
+            {filteredProfiles.length > 0 ? (
+              filteredProfiles.map(profile => (
                 <ProfileItem key={profile._id} profile={profile} />
               ))
             ) : (
