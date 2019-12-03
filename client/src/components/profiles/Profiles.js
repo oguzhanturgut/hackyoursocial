@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
@@ -10,18 +10,30 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
     getProfiles();
   }, [getProfiles]);
 
+  const [searchField, setSearchField] = useState('');
+
+  const filteredProfiles = profiles.filter(profile =>
+    profile.user.name.toLowerCase().includes(searchField.toLowerCase())
+  );
+  console.log(filteredProfiles);
+
   return (
     <Fragment>
       {loading ? (
         <Spinner />
       ) : (
         <Fragment>
-          <h1 className='large text-primary'>Developers</h1>
-          <p className='lead'>
-            <i className='fab fa-connectdevelop' /> Browse and connect with
+          <h1 className="large text-primary">Developers</h1>
+          <p className="lead">
+            <i className="fab fa-connectdevelop" /> Browse and connect with
             developers
           </p>
-          <div className='profiles'>
+          <input
+            type="search"
+            placeholder="seach for developers"
+            onChange={e => setSearchField(e.target.value)}
+          />
+          <div className="profiles">
             {profiles.length > 0 ? (
               profiles.map(profile => (
                 <ProfileItem key={profile._id} profile={profile} />
@@ -45,7 +57,4 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
-export default connect(
-  mapStateToProps,
-  { getProfiles }
-)(Profiles);
+export default connect(mapStateToProps, { getProfiles })(Profiles);
