@@ -36,21 +36,25 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
         <Spinner />
       ) : (
         <Fragment>
-          <h1 className='large text-primary'>Developers</h1>
-          <p className='lead'>
-            <i className='fab fa-connectdevelop' /> Browse and connect with developers
+          <h1 className="large text-primary">Developers</h1>
+          <p className="lead">
+            <i className="fab fa-connectdevelop" /> Browse and connect with developers
           </p>
           <input
-            type='search'
-            placeholder='search for developers'
-            onChange={e => setSearchField(e.target.value)}
+            type="search"
+            placeholder="search for developers"
+            onChange={e => {
+              setSearchField(e.target.value);
+              setCurrentPage(1);
+            }}
           />
           <Pagination
             profilesPerPage={profilesPerPage}
             totalProfiles={filteredProfiles.length}
             paginate={paginate}
+            currentPage={currentPage}
           />
-          <div className='profiles'>
+          <div className="profiles">
             {filteredProfiles.length > 0 ? (
               currentProfiles.map(profile => <ProfileItem key={profile._id} profile={profile} />)
             ) : (

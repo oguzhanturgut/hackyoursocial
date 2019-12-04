@@ -67,11 +67,7 @@ img {
 }
 
 .text-primary {
-  color: var(--primary-color);
-}
-
-.text-dark {
-  color: var(--dark-color);
+  color: var(--primary-color) !important;
 }
 
 /* Padding */
