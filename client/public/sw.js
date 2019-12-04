@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 1;
 const CURRENT_CACHES = {
   static: `static-v${CACHE_VERSION}`,
   dynamic: `dynamic-v${CACHE_VERSION}`,
@@ -12,6 +12,7 @@ const STATIC_FILES = [
   '/static/js/bundle.js',
   '/static/js/0.chunk.js',
   '/static/js/main.chunk.js',
+  '/static/js/main.chunk.js.map',
   '/sw.js',
   '/swReg.js',
   '/favicon.ico',
@@ -40,7 +41,7 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CURRENT_CACHES.static).then(cache => {
       console.log('Pre-caching...');
-      // Static Prefetching
+      // Static Precaching
       cache.addAll(STATIC_FILES);
     }),
   );
@@ -50,13 +51,13 @@ self.addEventListener('activate', event => {
   console.log('[SW] Activating sw', event);
   event.waitUntil(
     caches.keys().then(keys => {
+      // Deleting old caches
       return Promise.all(
-        keys.map(key => {
-          if (key !== CURRENT_CACHES.static && key !== CURRENT_CACHES.dynamic) {
-            console.log('[SW] Deleting old cache...');
+        keys
+          .filter(key => key !== CURRENT_CACHES.static && key !== CURRENT_CACHES.dynamic)
+          .map(key => {
             return caches.delete(key);
-          }
-        }),
+          }),
       );
     }),
   );
@@ -65,11 +66,12 @@ self.addEventListener('activate', event => {
 
 // Cache with network fallback & dynamic caching
 self.addEventListener('fetch', event => {
-  // if (event.request.url.includes('/api/profile')) {
+  // if (event.request.url.includes(`${self.location.origin}/api/profile`)) {
   //   event.respondWith(
   //     caches.open(CURRENT_CACHES.dynamic).then(cache => {
   //       return fetch(event.request).then(response => {
   //         const cloneResponse = response.clone();
+  //         trimCache(CURRENT_CACHES.dynamic, 30);
   //         cache.put(event.request.url, cloneResponse);
   //         return response;
   //       });
@@ -78,11 +80,10 @@ self.addEventListener('fetch', event => {
   // } else {
   event.respondWith(
     caches.match(event.request).then(response => {
-      if (response) {
-        return response;
-      } else {
-        // Dynamic Prefetching
-        return fetch(event.request)
+      return (
+        response ||
+        // Dynamic Precaching
+        fetch(event.request)
           .then(response => {
             return caches.open(CURRENT_CACHES.dynamic).then(cache => {
               const cloneResponse = response.clone();
@@ -97,8 +98,8 @@ self.addEventListener('fetch', event => {
                 return cache.match('/offline.html');
               }
             });
-          });
-      }
+          })
+      );
     }),
   );
   // }
