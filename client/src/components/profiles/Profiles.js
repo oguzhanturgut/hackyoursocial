@@ -14,9 +14,8 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
   const [searchField, setSearchField] = useState('');
 
   const filteredProfiles = profiles.filter(profile =>
-    profile.user.name.toLowerCase().includes(searchField.toLowerCase()),
+    profile.user.name.toLowerCase().includes(searchField.toLowerCase())
   );
-  console.log(filteredProfiles);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [profilesPerPage] = useState(5);
@@ -24,8 +23,10 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
   // Get current posts
   const indexOfLastProfile = currentPage * profilesPerPage;
   const indexOfFirstProfile = indexOfLastProfile - profilesPerPage;
-  const currentProfiles = filteredProfiles.slice(indexOfFirstProfile, indexOfLastProfile);
-  console.log(currentProfiles);
+  const currentProfiles = filteredProfiles.slice(
+    indexOfFirstProfile,
+    indexOfLastProfile
+  );
 
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -38,7 +39,8 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
         <Fragment>
           <h1 className="large text-primary">Developers</h1>
           <p className="lead">
-            <i className="fab fa-connectdevelop" /> Browse and connect with developers
+            <i className="fab fa-connectdevelop" /> Browse and connect with
+            developers
           </p>
           <input
             type="search"
@@ -56,7 +58,9 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
           />
           <div className="profiles">
             {filteredProfiles.length > 0 ? (
-              currentProfiles.map(profile => <ProfileItem key={profile._id} profile={profile} />)
+              currentProfiles.map(profile => (
+                <ProfileItem key={profile._id} profile={profile} />
+              ))
             ) : (
               <h4>No profiles found...</h4>
             )}
@@ -69,11 +73,11 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
 
 Profiles.propTypes = {
   getProfiles: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
+  profile: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  profile: state.profile,
+  profile: state.profile
 });
 
 export default connect(mapStateToProps, { getProfiles })(Profiles);
