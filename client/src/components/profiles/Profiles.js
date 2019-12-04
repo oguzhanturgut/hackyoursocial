@@ -43,7 +43,10 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
           <input
             type="search"
             placeholder="search for developers"
-            onChange={e => setSearchField(e.target.value)}
+            onChange={e => {
+              setSearchField(e.target.value);
+              setCurrentPage(1);
+            }}
           />
           <Pagination
             profilesPerPage={profilesPerPage}
