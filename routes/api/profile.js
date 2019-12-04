@@ -436,7 +436,7 @@ router.post('/friend/:id', auth, async (req, res) => {
       return res.json({ msg: `Your friend request is successfully sent to ${receiver.name}` }); // @Todo
     }
 
-    return res.status(500).json({ msg: 'Server error' });
+    return res.status(404).json({ msg: 'Not found' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
