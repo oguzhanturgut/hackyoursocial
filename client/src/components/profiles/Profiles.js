@@ -12,13 +12,11 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
   }, [getProfiles]);
 
   const [searchField, setSearchField] = useState('');
-
   const filteredProfiles = profiles.filter(profile => {
     const userName = profile.user.name.toLowerCase().substring(0, 3);
     const searchText = searchField.toLowerCase().substring(0, 3);
     return userName.includes(searchText);
   });
-  console.log(filteredProfiles);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [profilesPerPage] = useState(5);
@@ -27,7 +25,6 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
   const indexOfLastProfile = currentPage * profilesPerPage;
   const indexOfFirstProfile = indexOfLastProfile - profilesPerPage;
   const currentProfiles = filteredProfiles.slice(indexOfFirstProfile, indexOfLastProfile);
-  console.log(currentProfiles);
 
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
