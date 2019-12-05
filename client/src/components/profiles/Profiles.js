@@ -13,9 +13,11 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
 
   const [searchField, setSearchField] = useState('');
 
-  const filteredProfiles = profiles.filter(profile =>
-    profile.user.name.toLowerCase().includes(searchField.toLowerCase()),
-  );
+  const filteredProfiles = profiles.filter(profile => {
+    const userName = profile.user.name.toLowerCase().substring(0, 3);
+    const searchText = searchField.toLowerCase().substring(0, 3);
+    return userName.includes(searchText);
+  });
   console.log(filteredProfiles);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,14 +42,18 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
           <p className="lead">
             <i className="fab fa-connectdevelop" /> Browse and connect with developers
           </p>
-          <input
-            type="search"
-            placeholder="search for developers"
-            onChange={e => {
-              setSearchField(e.target.value);
-              setCurrentPage(1);
-            }}
-          />
+          <div className="div_search">
+            <input
+              className="search-txt"
+              type="search"
+              placeholder="search for developers"
+              onChange={e => {
+                setSearchField(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <i className="search-btn fas fa-search"></i>
+          </div>
           <Pagination
             profilesPerPage={profilesPerPage}
             totalProfiles={filteredProfiles.length}

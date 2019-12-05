@@ -492,6 +492,41 @@ button {
   margin-bottom: 0.5rem;
 }
 
+/* Developers */
+.div_search {
+  display: flex;
+  align-items: center;
+  background: #2f3640;
+  border-radius: 40px;
+  height: 40px;
+  margin: 5px;
+  margin-left: -5px;
+  width: 40px;
+  overflow: hidden;
+  transition: width 0.9s;
+}
+
+.search-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -40px;
+  border-radius: 50%;
+  color: white;
+}
+
+input[class='search-txt'] {
+  border: none;
+  background: none;
+  padding: 6px 0 0 20px;
+  color: white;
+}
+
+.div_search:hover {
+  width: 40%;
+}
 /* Mobile Styles */
 @media (max-width: 700px) {
   .container {
