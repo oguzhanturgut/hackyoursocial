@@ -453,6 +453,29 @@ button {
   flex-basis: 20%;
 }
 
+/* Notifications*/
+.notification {
+  display: grid;
+  grid-template-columns: 2fr 4fr;
+  grid-gap: 2rem;
+}
+
+.notification .table {
+  cursor: pointer;
+}
+
+.notification .table th,
+.notification .table td {
+  font-size: 18px;
+}
+
+.notification .table th:hover,
+.notification .table td:hover {
+  background-color: rgb(126, 123, 123);
+  color: #fff;
+  cursor: pointer;
+}
+
 /* Posts Page */
 .post-form .post-form-header {
   background: var(--primary-color);
@@ -567,9 +590,15 @@ button {
     margin-bottom: 0.2rem;
   }
 
+  /* Notification */
+  .notification {
+    grid-template-rows: 2fr, 2fr;
+  }
+
   .post {
     grid-template-columns: 1fr;
   }
+
   .post a,
   .post button {
     padding: 0.3rem 0.4rem;
