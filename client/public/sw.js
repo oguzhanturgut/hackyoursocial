@@ -52,7 +52,7 @@ self.addEventListener('activate', event => {
   console.log('[SW] Activating sw', event);
   event.waitUntil(
     caches.keys().then(keys => {
-      // Deleting old caches
+      // Deleting obsolete caches
       return Promise.all(
         keys
           .filter(key => key !== CURRENT_CACHES.static && key !== CURRENT_CACHES.dynamic)
@@ -64,6 +64,12 @@ self.addEventListener('activate', event => {
   );
   return self.clients.claim();
 });
+
+const isStaticAsset = (requestUrl, array) => {
+  const cachePath =
+    requestUrl.indexOf(self.origin) === 0 ? requestUrl.substring(self.origin.length) : requestUrl;
+  return array.indexOf(cachePath) > -1;
+};
 
 const apis = [`${self.location.origin}/api/profile`];
 
@@ -80,12 +86,14 @@ self.addEventListener('fetch', event => {
         });
       }),
     );
+  } else if (isStaticAsset(event.request.url, STATIC_FILES)) {
+    event.respondWith(caches.match(event.request));
   } else {
     event.respondWith(
       caches.match(event.request).then(response => {
         return (
           response ||
-          // Dynamic Precaching
+          // Dynamic Caching
           fetch(event.request)
             .then(response => {
               return caches.open(CURRENT_CACHES.dynamic).then(cache => {
