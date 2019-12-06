@@ -13,8 +13,8 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
 
   const [searchField, setSearchField] = useState('');
   const filteredProfiles = profiles.filter(profile => {
-    const userName = profile.user.name.toLowerCase().substring(0, 3);
-    const searchText = searchField.toLowerCase().substring(0, 3);
+    const userName = profile.user.name.toLowerCase();
+    const searchText = searchField.toLowerCase();
     return userName.includes(searchText);
   });
 
@@ -28,6 +28,12 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
 
   // Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
+
+  const onSearchHandler = event => {
+    const searchText = event.target.value;
+    setSearchField(searchText);
+    setCurrentPage(1);
+  };
 
   return (
     <Fragment>
@@ -43,11 +49,8 @@ const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
             <input
               className="search-txt"
               type="search"
-              placeholder="search for developers"
-              onChange={e => {
-                setSearchField(e.target.value);
-                setCurrentPage(1);
-              }}
+              placeholder="Search for developers"
+              onChange={onSearchHandler}
             />
             <i className="search-btn fas fa-search"></i>
           </div>

@@ -496,14 +496,12 @@ button {
 .div_search {
   display: flex;
   align-items: center;
-  background: #2f3640;
+  background: #484e53;
   border-radius: 40px;
   height: 40px;
-  margin: 5px;
+  margin: 10px;
   margin-left: -5px;
-  width: 40px;
   overflow: hidden;
-  transition: width 0.9s;
 }
 
 .search-btn {
@@ -522,11 +520,16 @@ input[class='search-txt'] {
   background: none;
   padding: 6px 0 0 20px;
   color: white;
+  outline-width: 0;
 }
 
-.div_search:hover {
-  width: 40%;
+input[class='search-txt']::-webkit-search-decoration,
+input[class='search-txt']::-webkit-search-cancel-button,
+input[class='search-txt']::-webkit-search-results-button,
+input[class='search-txt']::-webkit-search-results-decoration {
+  -webkit-appearance: none;
 }
+
 /* Mobile Styles */
 @media (max-width: 700px) {
   .container {
@@ -630,21 +633,18 @@ input[class='search-txt'] {
   padding: 0.5rem 0.75rem;
   margin-left: -1px;
   line-height: 1.25;
-  color: #007bff;
+  color: #17a2b8;
   background-color: #fff;
   border: 1px solid #dee2e6;
 }
 .page-link:hover {
-  z-index: 2;
   color: #0056b3;
   text-decoration: none;
   background-color: #e9ecef;
   border-color: #dee2e6;
 }
 .page-link:focus {
-  z-index: 3;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 .page-item:first-child .page-link {
   margin-left: 0;
@@ -656,10 +656,8 @@ input[class='search-txt'] {
   border-bottom-right-radius: 0.25rem;
 }
 .page-item.active .page-link {
-  z-index: 3;
   color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #17a2b8;
 }
 .page-item.disabled .page-link {
   color: #6c757d;
@@ -693,4 +691,10 @@ input[class='search-txt'] {
 .pagination-sm .page-item:last-child .page-link {
   border-top-right-radius: 0.2rem;
   border-bottom-right-radius: 0.2rem;
+}
+
+@media (min-width: 700px) {
+  .div_search {
+    width: 50%;
+  }
 }
