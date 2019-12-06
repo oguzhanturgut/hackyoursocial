@@ -13,8 +13,9 @@ const STATIC_FILES = [
   '/static/js/0.chunk.js',
   '/static/js/main.chunk.js',
   '/static/js/main.chunk.js.map',
+  '/manifest.json',
+  '/developer-icon-144.png',
   '/sw.js',
-  '/swReg.js',
   '/favicon.ico',
   'https://use.fontawesome.com/releases/v5.8.1/css/all.css',
   'https://use.fontawesome.com/releases/v5.8.1/webfonts/fa-solid-900.ttf',
@@ -64,45 +65,47 @@ self.addEventListener('activate', event => {
   return self.clients.claim();
 });
 
-// Cache with network fallback & dynamic caching
+const apis = [`${self.location.origin}/api/profile`];
+
+// Cache then network with fallback & dynamic caching
 self.addEventListener('fetch', event => {
-  // if (event.request.url.includes(`${self.location.origin}/api/profile`)) {
-  //   event.respondWith(
-  //     caches.open(CURRENT_CACHES.dynamic).then(cache => {
-  //       return fetch(event.request).then(response => {
-  //         const cloneResponse = response.clone();
-  //         trimCache(CURRENT_CACHES.dynamic, 30);
-  //         cache.put(event.request.url, cloneResponse);
-  //         return response;
-  //       });
-  //     }),
-  //   );
-  // } else {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return (
-        response ||
-        // Dynamic Precaching
-        fetch(event.request)
-          .then(response => {
-            return caches.open(CURRENT_CACHES.dynamic).then(cache => {
-              const cloneResponse = response.clone();
-              trimCache(CURRENT_CACHES.dynamic, 30);
-              cache.put(event.request.url, cloneResponse);
-              return response;
-            });
-          })
-          .catch(error => {
-            return caches.open(CURRENT_CACHES.static).then(cache => {
-              if (event.request.headers.get('accept').includes('text/html')) {
-                return cache.match('/offline.html');
-              }
-            });
-          })
-      );
-    }),
-  );
-  // }
+  if (apis.includes(event.request.url)) {
+    event.respondWith(
+      caches.open(CURRENT_CACHES.dynamic).then(cache => {
+        return fetch(event.request).then(response => {
+          const cloneResponse = response.clone();
+          trimCache(CURRENT_CACHES.dynamic, 30);
+          cache.put(event.request.url, cloneResponse);
+          return response;
+        });
+      }),
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        return (
+          response ||
+          // Dynamic Precaching
+          fetch(event.request)
+            .then(response => {
+              return caches.open(CURRENT_CACHES.dynamic).then(cache => {
+                const cloneResponse = response.clone();
+                trimCache(CURRENT_CACHES.dynamic, 30);
+                cache.put(event.request.url, cloneResponse);
+                return response;
+              });
+            })
+            .catch(error => {
+              return caches.open(CURRENT_CACHES.static).then(cache => {
+                if (event.request.headers.get('accept').includes('text/html')) {
+                  return cache.match('/offline.html');
+                }
+              });
+            })
+        );
+      }),
+    );
+  }
 });
 
 // Network with cache fallback

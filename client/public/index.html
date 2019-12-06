@@ -36,6 +36,18 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script src="swReg.js"></script>
+    <script type="text/javascript">
+      window.addEventListener('load'),
+        async event => {
+          if ('serviceWorker' in navigator) {
+            try {
+              await navigator.serviceWorker.register('./sw.js');
+              console.log('Service worker registered!');
+            } catch (error) {
+              console.error('Service worker failed!');
+            }
+          }
+        };
+    </script>
   </body>
 </html>
