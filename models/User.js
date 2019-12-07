@@ -35,6 +35,9 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+      avatar: {
+        type: String,
+      },
     },
   ],
   request: [
@@ -51,6 +54,9 @@ const UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+      avatar: {
+        type: String,
+      },
     },
   ],
   friendsList: [
@@ -66,6 +72,9 @@ const UserSchema = new mongoose.Schema({
       date: {
         type: Date,
         default: Date.now,
+      },
+      avatar: {
+        type: String,
       },
     },
   ],

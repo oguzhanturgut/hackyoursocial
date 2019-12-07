@@ -7,7 +7,6 @@ import DashboardActions from './DashboardActions';
 import Experience from './Experience';
 import Education from './Education';
 import { getCurrentProfile, deleteAccount } from '../../actions/profile';
-import { socket } from './../../utils/socketClient';
 
 const Dashboard = ({
   getCurrentProfile,
@@ -17,9 +16,6 @@ const Dashboard = ({
 }) => {
   useEffect(() => {
     getCurrentProfile();
-    socket.on('newFriendRequest', data => {
-      console.log(data);
-    });
   }, [getCurrentProfile]);
 
   return loading && profile === null ? (

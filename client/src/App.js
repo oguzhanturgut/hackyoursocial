@@ -10,6 +10,8 @@ import store from './store';
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 
+import { socketClient } from './utils/socketClient';
+
 import './App.css';
 
 if (localStorage.token) {
@@ -18,8 +20,10 @@ if (localStorage.token) {
 
 const App = () => {
   useEffect(() => {
+    socketClient();
     store.dispatch(loadUser());
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadUser]);
 
   return (
     <Provider store={store}>

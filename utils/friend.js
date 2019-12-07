@@ -9,11 +9,17 @@ const addSocketClient = ({ id, senderName, senderId, receiverName, receiverId })
 };
 
 const removeSocketClient = id => {
-  const index = socketClients.findIndex(socket => socket.id === id);
-
-  if (index !== -1) {
-    return socketClients.splice(index, 1)[0];
+  for (let i = 0; i < socketClients.length; i++) {
+    if (socketClients[i].id === id) {
+      socketClients.splice(i, 1);
+      i--;
+    }
   }
+  const onlineUsers = new Set();
+  socketClients.forEach(client => {
+    onlineUsers.add(client.senderId);
+  });
+  return Array.from(onlineUsers);
 };
 
 const getSocketClient = id => socketClients.find(socket => socket.id === id);

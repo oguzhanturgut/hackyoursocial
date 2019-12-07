@@ -11,7 +11,7 @@ import {
   CLEAR_PROFILE,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
-import { socket } from '../utils/socketClient';
+import { socketEmit, socketActions } from '../utils/socketClient';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -26,7 +26,7 @@ export const loadUser = () => async dispatch => {
       type: USER_LOADED,
       payload: res.data,
     });
-    socket.emit('sendAuth', res.data._id);
+    socketEmit(res);
   } catch (err) {
     dispatch({
       type: AUTH_ERROR,
@@ -109,6 +109,8 @@ export const logout = () => dispatch => {
 export const sendFriendRequest = id => async dispatch => {
   try {
     const res = await axios.post(`/api/profile/friend/${id}`);
+
+    socketActions(res, 'sendFriendRequest');
     dispatch(loadUser());
     dispatch(setAlert(res.data.msg, 'success'));
   } catch (err) {
@@ -119,28 +121,29 @@ export const sendFriendRequest = id => async dispatch => {
 export const acceptFriendRequest = id => async dispatch => {
   try {
     const res = await axios.put(`/api/profile/friend/${id}`);
+    socketActions(res, 'acceptFriendRequest');
     dispatch(loadUser());
     dispatch(setAlert(res.data.msg, 'success'));
   } catch (err) {
     dispatch(setAlert(err.response.data.msg, 'danger'));
   }
 };
-
 // Cancel Friend Request api/profile/friend/:senderId
 export const cancelFriendRequest = id => async dispatch => {
   try {
     const res = await axios.patch(`/api/profile/friend/${id}`);
+    socketActions(res, 'cancelFriendRequest');
     dispatch(loadUser());
     dispatch(setAlert(res.data.msg, 'success'));
   } catch (err) {
     dispatch(setAlert(err.response.data.msg, 'danger'));
   }
 };
-
 // Remove Friend api/profile/friend/:senderId
 export const removeFriend = id => async dispatch => {
   try {
     const res = await axios.delete(`/api/profile/friend/${id}`);
+    socketActions(res, 'removeFriend');
     dispatch(loadUser());
     dispatch(setAlert(res.data.msg, 'success'));
   } catch (err) {
