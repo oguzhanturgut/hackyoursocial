@@ -11,7 +11,7 @@ import { getPost } from '../../actions/post';
 const Post = ({ getPost, post: { post, loading }, match }) => {
   useEffect(() => {
     getPost(match.params.id);
-  }, [getPost]);
+  }, [getPost, match.params.id]);
 
   return loading || post === null ? (
     <Spinner />
@@ -33,14 +33,11 @@ const Post = ({ getPost, post: { post, loading }, match }) => {
 
 Post.propTypes = {
   getPost: PropTypes.func.isRequired,
-  post: PropTypes.object.isRequired
+  post: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
-  post: state.post
+  post: state.post,
 });
 
-export default connect(
-  mapStateToProps,
-  { getPost }
-)(Post);
+export default connect(mapStateToProps, { getPost })(Post);
