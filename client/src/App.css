@@ -475,15 +475,14 @@ button {
 }
 
 .notification-hover {
-  background-color: #ecfae9;
+  background-color: #fff;
   color: rgb(173, 165, 165);
   font-weight: bold;
   cursor: pointer;
 }
 
 .fa-trash:hover:before {
-  /* content: '\f2ed'; */
-  /* font-size: 1.5rem; */
+  content: '\f2ed';
   color: red;
 }
 

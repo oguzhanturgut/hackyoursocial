@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import { connect } from 'react-redux';
@@ -38,11 +38,6 @@ const Notification = ({ getNotifications, notification: { notifications, loading
           </thead>
         </table>
         <table className='table'>
-          <thead>
-            <tr>
-              <th>Notifications</th>
-            </tr>
-          </thead>
           <tbody>
             {notifications.map(notification => (
               <NotificationItem

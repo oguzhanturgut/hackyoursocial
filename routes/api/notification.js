@@ -64,7 +64,12 @@ router.put('/:id', auth, async (req, res) => {
       return res.status(401).json({ msg: 'User not authorized' });
     }
 
-    await notification.updateOne({ _id: req.params.id }, { $set: { status: true } });
+    await notification.update({ _id: req.params.id }, { $set: { status: true } }, function(
+      err,
+      result,
+    ) {
+      err ? console.log(err.message) : console.log(result);
+    });
 
     res.json(notification);
   } catch (err) {
