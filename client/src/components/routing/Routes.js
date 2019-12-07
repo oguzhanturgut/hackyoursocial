@@ -1,21 +1,22 @@
-import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import Register from '../auth/Register';
-import Login from '../auth/Login';
-import Alert from '../layout/Alert';
-import Dashboard from '../dashboard/Dashboard';
-import CreateProfile from '../profile-forms/CreateProfile';
-import EditProfile from '../profile-forms/EditProfile';
-import AddExperience from '../profile-forms/AddExperience';
-import AddEducation from '../profile-forms/AddEducation';
-import Profiles from '../profiles/Profiles';
-import Profile from '../profile/Profile';
-import Posts from '../posts/Posts';
-import Post from '../post/Post';
-import NotFound from '../layout/NotFound';
-import PrivateRoute from '../routing/PrivateRoute';
-import ChatApp from './../chat/App';
-import Friends from '../friends/Friends';
+import React from "react";
+import { Route, Switch } from "react-router-dom";
+import Register from "../auth/Register";
+import Login from "../auth/Login";
+import Alert from "../layout/Alert";
+import Dashboard from "../dashboard/Dashboard";
+import CreateProfile from "../profile-forms/CreateProfile";
+import EditProfile from "../profile-forms/EditProfile";
+import AddExperience from "../profile-forms/AddExperience";
+import AddEducation from "../profile-forms/AddEducation";
+import Profiles from "../profiles/Profiles";
+import Profile from "../profile/Profile";
+import Posts from "../posts/Posts";
+import Post from "../post/Post";
+import NotFound from "../layout/NotFound";
+import PrivateRoute from "../routing/PrivateRoute";
+import ChatApp from "./../chat/App";
+import Friends from "../friends/Friends";
+import FriendPosts from "../posts/FriendPosts";
 
 const Routes = () => {
   return (
@@ -35,6 +36,12 @@ const Routes = () => {
         <PrivateRoute exact path="/posts/:id" component={Post} />
         <PrivateRoute exact path="/chats" component={ChatApp} />
         <PrivateRoute exact path="/friends" component={Friends} />
+        <PrivateRoute
+          exact
+          path="/friend-posts/:userId"
+          component={FriendPosts}
+        />
+
         <Route component={NotFound} />
       </Switch>
     </section>
