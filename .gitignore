@@ -1,2 +1,7 @@
 node_modules/
+client/node_modules/
 config/production.json
+client/debug.log
+config/default.json
+package-lock.json
+
