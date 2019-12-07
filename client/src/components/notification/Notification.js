@@ -1,11 +1,17 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../layout/Spinner';
 import { connect } from 'react-redux';
 import { getNotifications } from '../../actions/notification';
 import NotificationItem from './NotificationItem';
+import { setAlert } from '../../actions/alert';
+// import { deleteNotification } from '../../actions/notification';
 
-const Notification = ({ getNotifications, notification: { notifications, loading } }) => {
+const Notification = ({ setAlert, getNotifications, notification: { notifications, loading } }) => {
+  // const [allNotifications, setAllNotifications] = useState(true);
+  // const [read, setRead] = useState(false);
+  // const [unread, setUnread] = useState(false);
+
   useEffect(() => {
     getNotifications();
   }, [getNotifications]);
@@ -23,29 +29,37 @@ const Notification = ({ getNotifications, notification: { notifications, loading
         <table className='table'>
           <thead>
             <tr>
-              <th className='hide-sm'>All Notifications</th>
+              <th>All Notifications</th>
               <th>{notifications.length}</th>
             </tr>
             <tr>
-              <th className='hide-sm'>Unread</th>
-              <th>{notifications.length}</th>
+              <th>Unread</th>
+              <th>{notifications.filter(notification => notification.status === false).length}</th>
             </tr>
             <tr>
-              <th className='hide-sm'>Read</th>
-              <th>{notifications.length}</th>
+              <th>Read</th>
+              <th>{notifications.filter(notification => notification.status === true).length}</th>
             </tr>
           </thead>
         </table>
         <table className='table'>
           <thead>
             <tr>
-              <th className='hide-sm'>Notifications</th>
-              <th>{notifications.length}</th>
+              <th>Notifications</th>
             </tr>
           </thead>
           <tbody>
-            {notifications.map(item => (
-              <NotificationItem key={item._id} text={item.text} date={item.date} />
+            {notifications.map(notification => (
+              <NotificationItem
+                key={notification._id}
+                id={notification._id}
+                text={notification.text}
+                date={notification.date}
+                link={notification.linkTo}
+                className={`list ${
+                  notification.status ? 'notification-item' : 'notification-hover'
+                }`}
+              />
             ))}
           </tbody>
         </table>
@@ -59,6 +73,6 @@ Notification.propTypes = {
   notification: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({ notification: state.notification });
+const mapStateToProps = state => ({ auth: state.auth, notification: state.notification });
 
-export default connect(mapStateToProps, { getNotifications })(Notification);
+export default connect(mapStateToProps, { setAlert, getNotifications })(Notification);

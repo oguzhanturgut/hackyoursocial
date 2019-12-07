@@ -460,20 +460,31 @@ button {
   grid-gap: 2rem;
 }
 
-.notification .table {
-  cursor: pointer;
-}
-
-.notification .table th,
-.notification .table td {
+.list {
   font-size: 18px;
 }
 
-.notification .table th:hover,
-.notification .table td:hover {
-  background-color: rgb(126, 123, 123);
-  color: #fff;
+.notification .table th {
+  font-size: 18px;
+}
+
+.notification-item {
+  background-color: #fff;
+  color: #114ccc;
   cursor: pointer;
+}
+
+.notification-hover {
+  background-color: #ecfae9;
+  color: rgb(173, 165, 165);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.fa-trash:hover:before {
+  /* content: '\f2ed'; */
+  /* font-size: 1.5rem; */
+  color: red;
 }
 
 /* Posts Page */
@@ -592,7 +603,12 @@ button {
 
   /* Notification */
   .notification {
-    grid-template-rows: 2fr, 2fr;
+    grid-template-columns: 1fr;
+  }
+
+  .notification .table th,
+  .notification .table td {
+    font-size: 1rem;
   }
 
   .post {

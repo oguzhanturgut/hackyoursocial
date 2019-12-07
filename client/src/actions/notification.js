@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { GET_NOTIFICATIONS, NOTIFICATIONS_ERROR } from './types';
+import { GET_NOTIFICATIONS, NOTIFICATIONS_ERROR, DELETE_NOTIFICATION } from './types';
 
 // Get Notifications
 export const getNotifications = () => async dispatch => {
@@ -15,6 +15,28 @@ export const getNotifications = () => async dispatch => {
     dispatch({
       type: NOTIFICATIONS_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status },
+    });
+  }
+};
+
+// Delete notification
+export const deleteNotification = id => async dispatch => {
+  try {
+    await axios.delete(`/api/notification/${id}`);
+
+    dispatch({
+      type: DELETE_NOTIFICATION,
+      payload: id,
+    });
+
+    dispatch(setAlert('Notification removed', 'success'));
+  } catch (err) {
+    dispatch({
+      type: NOTIFICATIONS_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
     });
   }
 };
