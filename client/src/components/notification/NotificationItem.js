@@ -4,24 +4,24 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Moment from 'react-moment';
 import Spinner from '../layout/Spinner';
-import { deleteNotification } from '../../actions/notification';
+import { deleteNotification, updateNotification } from '../../actions/notification';
 
 const NotificationItem = ({
   deleteNotification,
+  updateNotification,
   id,
   auth,
   text,
   date,
   link,
   className,
-  status,
-  notification: { loading, notifications },
+  notification: { loading },
 }) =>
   loading ? (
     <Spinner />
   ) : (
     <tr className={className}>
-      <Link to={link}>
+      <Link to={link} onClick={() => updateNotification(id)}>
         <td>{text}</td>
         <td>
           <Moment format='DD.MM.YYYY HH:mm:ss'>{date}</Moment>
@@ -37,6 +37,7 @@ NotificationItem.propTypes = {
   notification: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   deleteNotification: PropTypes.func.isRequired,
+  updateNotification: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -44,4 +45,6 @@ const mapStateToProps = state => ({
   notification: state.notification,
 });
 
-export default connect(mapStateToProps, { deleteNotification })(NotificationItem);
+export default connect(mapStateToProps, { deleteNotification, updateNotification })(
+  NotificationItem,
+);

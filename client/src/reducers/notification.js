@@ -1,4 +1,9 @@
-import { GET_NOTIFICATIONS, NOTIFICATIONS_ERROR, DELETE_NOTIFICATION } from '../actions/types';
+import {
+  GET_NOTIFICATIONS,
+  NOTIFICATIONS_ERROR,
+  DELETE_NOTIFICATION,
+  UPDATE_NOTIFICATION,
+} from '../actions/types';
 
 const initialState = {
   notifications: [],
@@ -18,6 +23,12 @@ export default function(state = initialState, action) {
         loading: false,
       };
     case DELETE_NOTIFICATION:
+      return {
+        ...state,
+        notifications: state.notifications.filter(notification => notification._id !== payload),
+        loading: false,
+      };
+    case UPDATE_NOTIFICATION:
       return {
         ...state,
         notifications: state.notifications.filter(notification => notification._id !== payload),

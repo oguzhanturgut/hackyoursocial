@@ -5,13 +5,8 @@ import { connect } from 'react-redux';
 import { getNotifications } from '../../actions/notification';
 import NotificationItem from './NotificationItem';
 import { setAlert } from '../../actions/alert';
-// import { deleteNotification } from '../../actions/notification';
 
-const Notification = ({ setAlert, getNotifications, notification: { notifications, loading } }) => {
-  // const [allNotifications, setAllNotifications] = useState(true);
-  // const [read, setRead] = useState(false);
-  // const [unread, setUnread] = useState(false);
-
+const Notification = ({ getNotifications, notification: { notifications, loading } }) => {
   useEffect(() => {
     getNotifications();
   }, [getNotifications]);

@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { setAlert } from './alert';
-import { GET_NOTIFICATIONS, NOTIFICATIONS_ERROR, DELETE_NOTIFICATION } from './types';
+import {
+  GET_NOTIFICATIONS,
+  NOTIFICATIONS_ERROR,
+  DELETE_NOTIFICATION,
+  UPDATE_NOTIFICATION,
+} from './types';
 
 // Get Notifications
 export const getNotifications = () => async dispatch => {
@@ -30,6 +35,28 @@ export const deleteNotification = id => async dispatch => {
     });
 
     dispatch(setAlert('Notification removed', 'success'));
+  } catch (err) {
+    dispatch({
+      type: NOTIFICATIONS_ERROR,
+      payload: {
+        msg: err.response.statusText,
+        status: err.response.status,
+      },
+    });
+  }
+};
+
+// Update notification
+export const updateNotification = id => async dispatch => {
+  try {
+    await axios.put(`/api/notification/${id}`);
+
+    dispatch({
+      type: UPDATE_NOTIFICATION,
+      payload: id,
+    });
+
+    dispatch(setAlert('Notification marked as read', 'success'));
   } catch (err) {
     dispatch({
       type: NOTIFICATIONS_ERROR,
