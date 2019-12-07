@@ -25,3 +25,4 @@ export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const USERNAME_ADD = 'USERNAME_ADD';
 export const USERLIST_ADD = 'USERLIST_ADD';
 export const MESSAGE_ADD = 'MESSAGE_ADD';
+export const CONFIRM_EMAIL = 'CONFIRM_EMAIL';
