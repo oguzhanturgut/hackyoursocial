@@ -24,7 +24,9 @@ const NotificationItem = ({
       <Link to={link} onClick={() => updateNotification(id)}>
         <td>{text}</td>
         <td>
-          <Moment format='DD.MM.YYYY HH:mm:ss'>{date}</Moment>
+          <Moment fromNow ago>
+            {date}
+          </Moment>
         </td>
       </Link>
       <td onClick={() => deleteNotification(id)}>
