@@ -740,3 +740,49 @@ div.header {
   color: white;
   background-color: #343a40;
 }
+
+@media (max-width: 980px) {
+  .friend-list a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 728px) {
+  .chat-user-container {
+    top: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  .user-chat-box {
+    max-width: 100vw;
+  }
+  .guest-chat-box {
+    max-width: 100vw;
+  }
+
+  .chat-message-container {
+    width: 80%;
+  }
+
+  .chat-body {
+    width: 60%;
+    font-size: 0.75rem;
+  }
+
+  .chat-body .primary-font {
+    white-space: nowrap;
+  }
+
+  .chat-user-container h6 {
+    font-size: 0.75rem;
+  }
+
+  .chat-user-container {
+    font-size: 0.75rem;
+    overflow: auto;
+  }
+}

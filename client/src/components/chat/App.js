@@ -10,23 +10,19 @@ const App = ({ auth: { user }, chat }) => {
     return <Spinner />;
   }
 
-  if (!chat.userlist.length) {
-  }
-
   const username = user.name;
-  const chatt = username ? <Chat user={user} /> : null;
-  return <Fragment>{chatt}</Fragment>;
+  const chatApp = username ? <Chat user={user} /> : null;
+  return <Fragment>{chatApp}</Fragment>;
 };
 
 App.propTypes = {
-  auth: PropTypes.object
+  auth: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
   user: state.user,
   auth: state.auth,
-  chat: state.chat
-
+  chat: state.chat,
 });
 
 export default connect(mapStateToProps)(App);
