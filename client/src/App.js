@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import reactGA from 'react-ga'
+import reactGA from 'react-ga';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
 import Routes from './components/routing/Routes';
@@ -22,7 +22,7 @@ const App = () => {
     reactGA.initialize('UA-153483511-1');
 
     // to report page view
-    reactGA.pageview(window.location.pathname + window.location.search)
+    reactGA.pageview(window.location.pathname + window.location.search);
   }, []);
 
   return (
