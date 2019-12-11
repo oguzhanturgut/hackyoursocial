@@ -1,6 +1,10 @@
 {
-  "mongoURI": "",
-  "jwtSecret": "",
-  "githubClientId": "",
-  "githubSecret": ""
+  "mongoURI": "mongodb+srv://musafir928:000sun1016@devconnector-mrtxa.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "secret",
+  "emailSecret": "secret2",
+  "githubClientId": "4807401adfe078bad374",
+  "githubSecret": "6e069ffe38e4dd6fad7eb69c7d768e8b21dfad8d",
+  "email": "oguzhan@turgut.biz",
+  "emailPw": "4fsgsRekDYea",
+  "local_url": "http://localhost:3000"
 }
