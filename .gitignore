@@ -2,7 +2,6 @@ node_modules/
 client/node_modules/
 config/production.json
 client/debug.log
-package-lock.json
 client/src/social-config/
 client/package-lock.json
 client/src/social-config/firebaseConfig.js
