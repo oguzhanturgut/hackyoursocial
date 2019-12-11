@@ -18,12 +18,13 @@ const ProfileItem = ({
   auth: { user, isAuthenticated }
 }) => {
   const Button = () => {
-    const isFriend = user.friendsList.filter(friend => friend.friendId === _id);
-    const isRequested = user.request.filter(req => req.userId === _id);
-    const isSent = user.sentRequest.filter(sendReq => sendReq.userId === _id);
-    const isLoggedUser = user._id === _id;
-
-    if (isAuthenticated && !isLoggedUser) {
+    if (!isAuthenticated) return <></>;
+    if (isAuthenticated && user._id !== _id) {
+      const isFriend = user.friendsList.filter(
+        friend => friend.friendId === _id
+      );
+      const isRequested = user.request.filter(req => req.userId === _id);
+      const isSent = user.sentRequest.filter(sendReq => sendReq.userId === _id);
       if (isFriend.length > 0) {
         return (
           <p className='text-primary my-1'>
