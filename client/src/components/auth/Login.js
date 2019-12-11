@@ -39,50 +39,53 @@ const Login = ({
 
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to="/dashboard" />;
+    return <Redirect to='/dashboard' />;
   }
 
   return (
     <Fragment>
-      <h1 className="large text-primary">Sign In</h1>
-      <p className="lead">
-        <i className="fas fa-user"></i> Sign Into Your Account
+      <h1 className='large text-primary'>Sign In</h1>
+      <p className='lead'>
+        <i className='fas fa-user'></i> Sign Into Your Account
       </p>
-      <form className="form" onSubmit={e => onSubmit(e)}>
-        <div className="form-group">
+      <form className='form' onSubmit={e => onSubmit(e)}>
+        <div className='form-group'>
           <input
-            type="email"
-            placeholder="Email Address"
-            name="email"
+            type='email'
+            placeholder='Email Address'
+            name='email'
             value={email}
             onChange={e => onChange(e)}
             required
           />
         </div>
 
-        <div className="form-group">
+        <div className='form-group'>
           <input
-            type="password"
-            placeholder="Password"
-            name="password"
+            type='password'
+            placeholder='Password'
+            name='password'
             value={password}
             onChange={e => onChange(e)}
-            minLength="6"
+            minLength='6'
           />
         </div>
-        <input type="submit" className="btn btn-primary" value="Login" />
+        <input type='submit' className='btn btn-primary' value='Login' />
       </form>
-      <p className="my-1">
-        Don't have an account? <Link to="/register">Sign Up</Link>
+      <p className='my-1'>
+        <Link to='/email-password'>Forgot password?</Link>
       </p>
-      <button className="btn" onClick={() => handleLoginFacebook(accessToken)}>
-        <i className="fab fa-facebook-f"></i> Sign In with Facebook
+      <p className='my-1'>
+        Don't have an account? <Link to='/register'>Sign Up</Link>
+      </p>
+      <button className='btn' onClick={() => handleLoginFacebook(accessToken)}>
+        <i className='fab fa-facebook-f'></i> Sign In with Facebook
       </button>
       <button
-        className="btn btn-email"
+        className='btn btn-email'
         onClick={() => handleLoginGoogle(accessToken)}
       >
-        <i className="fas fa-envelope"></i> Sign In with Google
+        <i className='fas fa-envelope'></i> Sign In with Google
       </button>
     </Fragment>
   );

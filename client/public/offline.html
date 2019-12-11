@@ -20,33 +20,13 @@
       integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
       crossorigin="anonymous"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap-grid.min.css"
-    />
-
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap"
-      rel="stylesheet"
-    />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Hack Your Social</title>
   </head>
-
   <body>
+    <p className="lead"><i className="fas fa-error" /> We are not able to cache this page yet!</p>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
-    <script type="text/javascript">
-      window.addEventListener('load', async event => {
-        if ('serviceWorker' in navigator) {
-          try {
-            await navigator.serviceWorker.register('./sw.js');
-            console.log('Service worker registered!');
-          } catch (error) {
-            console.error('Service worker failed!');
-          }
-        }
-      });
-    </script>
+    <script src="swReg.js"></script>
   </body>
 </html>

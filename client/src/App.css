@@ -14,7 +14,7 @@
 }
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   background-color: #fff;
@@ -67,11 +67,7 @@ img {
 }
 
 .text-primary {
-  color: var(--primary-color);
-}
-
-.text-dark {
-  color: var(--dark-color);
+  color: var(--primary-color) !important;
 }
 
 /* Padding */
@@ -244,11 +240,19 @@ img {
   margin-top: 0.3rem;
   color: #888;
 }
+input[type="search"] {
+  display: block;
+  width: 100%;
+  padding: 0.4rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+}
 
-.form input[type='text'],
-.form input[type='email'],
-.form input[type='password'],
-.form input[type='date'],
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form input[type="date"],
 .form select,
 .form textarea {
   display: block;
@@ -258,7 +262,7 @@ img {
   border: 1px solid #ccc;
 }
 
-.form input[type='submit'],
+.form input[type="submit"],
 button {
   font: inherit;
 }
@@ -333,7 +337,7 @@ button {
 /* Landing Page */
 .landing {
   position: relative;
-  background: url('./img/showcase.jpg') no-repeat center center/cover;
+  background: url("./img/showcase.jpg") no-repeat center center/cover;
   height: 100vh;
 }
 
@@ -364,10 +368,10 @@ button {
 .profile-grid {
   display: grid;
   grid-template-areas:
-    'top top'
-    'about about'
-    'exp edu'
-    'github github';
+    "top top"
+    "about about"
+    "exp edu"
+    "github github";
   grid-gap: 1rem;
 }
 
@@ -488,6 +492,62 @@ button {
   margin-bottom: 0.5rem;
 }
 
+/* Friends Page */
+.friend-card {
+  border: #ccc solid 1px;
+  background: var(--light-color);
+  display: grid;
+  grid-template-columns: 1fr 5fr 2fr;
+  align-items: center;
+  grid-gap: 0rem;
+  padding: 0.5rem 1rem;
+  line-height: 1.3;
+}
+
+.friend-name-card {
+  border-right: #ccc solid 1px;
+  border-left: #ccc solid 1px;
+  font-size: 1.2rem;
+  padding-left: 2rem;
+}
+/* Developers */
+.div_search {
+  display: flex;
+  align-items: center;
+  background: #484e53;
+  border-radius: 40px;
+  height: 40px;
+  margin: 10px;
+  margin-left: -5px;
+  overflow: hidden;
+}
+
+.search-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -40px;
+  border-radius: 50%;
+  color: white;
+}
+
+input[class="search-txt"] {
+  border: none;
+  background: none;
+  padding: 6px 0 0 20px;
+  color: white;
+  outline-width: 0;
+}
+
+input[class="search-txt"]::-webkit-search-decoration,
+input[class="search-txt"]::-webkit-search-cancel-button,
+input[class="search-txt"]::-webkit-search-results-button,
+input[class="search-txt"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+}
+
 /* Mobile Styles */
 @media (max-width: 700px) {
   .container {
@@ -550,11 +610,11 @@ button {
 
   .profile-grid {
     grid-template-areas:
-      'top'
-      'about'
-      'exp'
-      'edu'
-      'github';
+      "top"
+      "about"
+      "exp"
+      "edu"
+      "github";
   }
 
   .profile-about .skills {
@@ -573,5 +633,232 @@ button {
   .post a,
   .post button {
     padding: 0.3rem 0.4rem;
+  }
+
+  /* Friends page */
+  .friend-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    align-items: left;
+    padding: 0.5rem;
+  }
+
+  .friend-card img {
+    width: 25%;
+    margin: 0.5rem auto;
+  }
+
+  .friend-name-card {
+    border: #ccc solid 1px;
+  }
+}
+
+/* Live Chat Component Styles */
+
+.chat-user-container {
+  background-color: #343a40;
+  width: 20%;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+}
+.chat-user-container h6 {
+  color: #0c9463;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.5rem;
+  background-color: #2d334a65;
+}
+.active.grey {
+  background-color: #454b52;
+}
+.chat-user {
+  color: white;
+  text-transform: capitalize;
+}
+
+.chat.room {
+  background-color: #851515 !important;
+}
+.chat-room .friend-list li {
+  border-bottom: 1px solid #e0e0e0;
+}
+.chat-room .friend-list li:last-of-type {
+  border-bottom: none;
+}
+
+.chat-room img.avatar {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 50% !important;
+}
+
+.chat-room .text-small {
+  font-size: 0.95rem;
+}
+
+.chat-room .text-smaller {
+  font-size: 0.75rem;
+}
+
+.z-depth-1 {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+.chat-body {
+  padding: 1.5rem !important;
+  width: 20rem;
+  line-height: 1.5;
+  font-family: "Roboto", sans-serif;
+  color: #212529;
+  word-break: break-all;
+}
+
+.chat-body p {
+  padding: 0.75rem 0rem !important;
+}
+
+div.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.primary-font {
+  color: #212529;
+  font-weight: 700;
+  margin-right: 1rem;
+}
+
+.pull-right {
+  color: #6c757d !important;
+
+  font-weight: 300;
+}
+
+.chat-footer p {
+  color: greenyellow;
+}
+
+.user-chat-box {
+  flex-flow: row;
+}
+
+.guest-chat-box {
+  flex-flow: row-reverse;
+}
+
+.chat-input {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: whitesmoke;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px;
+  border-radius: 5px;
+  width: 60%;
+  height: 60px;
+  border: 1px solid #0c7c80;
+}
+.chat-send-button {
+  position: fixed;
+  background-color: rgb(15, 112, 192);
+  width: 10%;
+  height: 60px;
+  bottom: 0;
+  right: 25%;
+  border-radius: 5px;
+  margin: 4px;
+  border: 1px solid #0c7c80;
+  color: white;
+  transition: 0.15s all ease-in;
+}
+
+.chat-send-button:hover {
+  color: white;
+  background-color: #343a40;
+}
+
+/* pagination */
+.pagination {
+  display: -ms-flexbox;
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+.page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #17a2b8;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+.page-link:hover {
+  color: #0056b3;
+  text-decoration: none;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+.page-link:focus {
+  outline: 0;
+}
+.page-item:first-child .page-link {
+  margin-left: 0;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+.page-item:last-child .page-link {
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+.page-item.active .page-link {
+  color: #fff;
+  background-color: #17a2b8;
+}
+.page-item.disabled .page-link {
+  color: #6c757d;
+  pointer-events: none;
+  cursor: auto;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
+.pagination-lg .page-link {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+.pagination-lg .page-item:first-child .page-link {
+  border-top-left-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
+}
+.pagination-lg .page-item:last-child .page-link {
+  border-top-right-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+}
+.pagination-sm .page-link {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.pagination-sm .page-item:first-child .page-link {
+  border-top-left-radius: 0.2rem;
+  border-bottom-left-radius: 0.2rem;
+}
+.pagination-sm .page-item:last-child .page-link {
+  border-top-right-radius: 0.2rem;
+  border-bottom-right-radius: 0.2rem;
+}
+
+@media (min-width: 700px) {
+  .div_search {
+    width: 50%;
   }
 }
