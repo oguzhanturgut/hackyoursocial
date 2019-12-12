@@ -22,14 +22,12 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get('/api/auth');
-    console.log('from loaduser', res);
     dispatch({
       type: USER_LOADED,
       payload: res.data,
     });
     socketEmit(res);
   } catch (err) {
-    console.log('error coming loaduser');
     dispatch({
       type: AUTH_ERROR,
     });
@@ -83,9 +81,7 @@ export const login = (email, password) => async dispatch => {
   const body = JSON.stringify({ email, password });
 
   try {
-    console.log('before login');
     const res = await axios.post('/api/auth', body, config);
-    console.log('after login', res.data);
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data, //token

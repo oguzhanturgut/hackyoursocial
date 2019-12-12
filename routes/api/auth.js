@@ -16,9 +16,7 @@ const User = require('../../models/User');
 // @access   Public
 router.get('/', auth, async (req, res) => {
   try {
-    console.log('this is api auth before');
     const user = await User.findById(req.user.id).select('-password');
-    console.log('this is api auth', user);
     res.json(user);
   } catch (err) {
     console.error(err.message);
