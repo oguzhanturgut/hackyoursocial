@@ -9,6 +9,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   CLEAR_PROFILE,
+  CONFIRM_EMAIL,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { socketEmit, socketActions } from '../utils/socketClient';
@@ -21,13 +22,14 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get('/api/auth');
-
+    console.log('from loaduser', res);
     dispatch({
       type: USER_LOADED,
       payload: res.data,
     });
     socketEmit(res);
   } catch (err) {
+    console.log('error coming loaduser');
     dispatch({
       type: AUTH_ERROR,
     });
@@ -49,10 +51,13 @@ export const register = ({ name, email, password }) => async dispatch => {
 
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: res.data,
     });
 
+    dispatch(setAlert(res.data.msg, 'success'));
+
     dispatch(loadUser());
+
+    return true;
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -63,6 +68,7 @@ export const register = ({ name, email, password }) => async dispatch => {
     dispatch({
       type: REGISTER_FAIL,
     });
+    return false;
   }
 };
 
@@ -77,11 +83,12 @@ export const login = (email, password) => async dispatch => {
   const body = JSON.stringify({ email, password });
 
   try {
+    console.log('before login');
     const res = await axios.post('/api/auth', body, config);
-
+    console.log('after login', res.data);
     dispatch({
       type: LOGIN_SUCCESS,
-      payload: res.data,
+      payload: res.data, //token
     });
 
     dispatch(loadUser());
@@ -95,6 +102,43 @@ export const login = (email, password) => async dispatch => {
     dispatch({
       type: LOGIN_FAIL,
     });
+  }
+};
+
+// Confirm email
+export const confirmEmail = token => async dispatch => {
+  try {
+    const res = await axios.put(`/api/users/confirm/${token}`);
+    if (res.data.msg) dispatch(setAlert(res.data.msg, 'success'));
+    dispatch({ type: CONFIRM_EMAIL, payload: res.data });
+    dispatch(loadUser());
+  } catch (error) {
+    const { errors } = error.response.data;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+    dispatch({ type: LOGIN_FAIL });
+    return errors && errors[0].msg;
+  }
+};
+
+// Resend email
+export const resendEmail = email => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = JSON.stringify({ email });
+  try {
+    const res = await axios.post('/api/users/resend', body, config);
+    dispatch(setAlert(res.data.msg, 'success'));
+  } catch (error) {
+    const { errors } = error.response.data;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
   }
 };
 

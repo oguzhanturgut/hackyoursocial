@@ -6,14 +6,15 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  ACCOUNT_DELETED
+  ACCOUNT_DELETED,
+  CONFIRM_EMAIL,
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   loading: true,
-  user: null
+  user: null,
 };
 
 export default function(state = initialState, action) {
@@ -21,20 +22,27 @@ export default function(state = initialState, action) {
 
   switch (type) {
     case USER_LOADED:
+      console.log(payload);
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload
+        user: payload,
       };
     case REGISTER_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: false,
+        loading: false,
+      };
     case LOGIN_SUCCESS:
+    case CONFIRM_EMAIL:
       localStorage.setItem('token', payload.token);
       return {
         ...state,
         ...payload,
         isAuthenticated: true,
-        loading: false
+        loading: false,
       };
     case REGISTER_FAIL:
     case AUTH_ERROR:
@@ -46,7 +54,7 @@ export default function(state = initialState, action) {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: false
+        loading: false,
       };
     default:
       return state;
