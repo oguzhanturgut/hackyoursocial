@@ -76,7 +76,6 @@ export default function(state = initialState, action) {
         loading: false,
       };
     case GET_LATEST_POSTS:
-      console.log(payload);
       return {
         ...state,
         latestPosts: payload,

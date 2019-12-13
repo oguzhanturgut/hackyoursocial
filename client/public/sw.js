@@ -73,19 +73,8 @@ const isStaticAsset = (requestUrl, array) => {
 
 // Cache then network with fallback & dynamic caching
 self.addEventListener('fetch', event => {
-  if (event.request.url === `${self.location.origin}/api/auth`) {
+  if (event.request.url.includes('/api/')) {
     event.respondWith(fetch(event.request));
-  } else if (event.request.url === `${self.location.origin}/api/profile`) {
-    event.respondWith(
-      caches.open(CURRENT_CACHES.dynamic).then(cache => {
-        return fetch(event.request).then(response => {
-          const cloneResponse = response.clone();
-          trimCache(CURRENT_CACHES.dynamic, 30);
-          cache.put(event.request.url, cloneResponse);
-          return response;
-        });
-      }),
-    );
   } else if (isStaticAsset(event.request.url, STATIC_FILES)) {
     event.respondWith(caches.match(event.request));
   } else {
