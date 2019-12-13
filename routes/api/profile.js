@@ -14,10 +14,9 @@ const Post = require('../../models/Post');
 // @access   Private
 router.get('/me', auth, async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.user.id }).populate(
-      'user',
-      ['name', 'avatar']
-    );
+    const profile = await Profile.findOne({
+      user: req.user.id,
+    }).populate('user', ['name', 'avatar']);
 
     if (!profile) {
       return res.status(400).json({ msg: 'There is no profile for this user' });
@@ -43,8 +42,8 @@ router.post(
         .isEmpty(),
       check('skills', 'Skills is required')
         .not()
-        .isEmpty()
-    ]
+        .isEmpty(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -64,7 +63,7 @@ router.post(
       facebook,
       twitter,
       instagram,
-      linkedin
+      linkedin,
     } = req.body;
 
     // Build profile object
@@ -93,14 +92,14 @@ router.post(
       let profile = await Profile.findOneAndUpdate(
         { user: req.user.id },
         { $set: profileFields },
-        { new: true, upsert: true }
+        { new: true, upsert: true },
       );
       res.json(profile);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-  }
+  },
 );
 
 // @route    GET api/profile
@@ -122,7 +121,7 @@ router.get('/', async (req, res) => {
 router.get('/user/:user_id', async (req, res) => {
   try {
     const profile = await Profile.findOne({
-      user: req.params.user_id
+      user: req.params.user_id,
     }).populate('user', ['name', 'avatar']);
 
     if (!profile) return res.status(400).json({ msg: 'Profile not found' });
@@ -172,8 +171,8 @@ router.put(
         .isEmpty(),
       check('from', 'From date is required')
         .not()
-        .isEmpty()
-    ]
+        .isEmpty(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -181,15 +180,7 @@ router.put(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {
-      title,
-      company,
-      location,
-      from,
-      to,
-      current,
-      description
-    } = req.body;
+    const { title, company, location, from, to, current, description } = req.body;
 
     const newExp = {
       title,
@@ -198,7 +189,7 @@ router.put(
       from,
       to,
       current,
-      description
+      description,
     };
 
     try {
@@ -213,7 +204,7 @@ router.put(
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-  }
+  },
 );
 
 // @route    DELETE api/profile/experience/:exp_id
@@ -246,20 +237,17 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
     // if i dont add .toString() it returns this weird mongoose coreArray and the ids are somehow objects and it still deletes anyway even if you put /experience/5
     const removeIndex = expIds.indexOf(req.params.exp_id);
     if (removeIndex === -1) {
-      return res.status(500).json({ msg: "Server error" });
+      return res.status(500).json({ msg: 'Server error' });
     } else {
       // theses console logs helped me figure it out
-      console.log("expIds", expIds);
-      console.log("typeof expIds", typeof expIds);
-      console.log("req.params", req.params);
-      console.log("removed", expIds.indexOf(req.params.exp_id));
+
       foundProfile.experience.splice(removeIndex, 1);
       await foundProfile.save();
       return res.status(200).json(foundProfile);
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ msg: "Server error" });
+    return res.status(500).json({ msg: 'Server error' });
   }
 });
 
@@ -282,8 +270,8 @@ router.put(
         .isEmpty(),
       check('from', 'From date is required')
         .not()
-        .isEmpty()
-    ]
+        .isEmpty(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -291,15 +279,7 @@ router.put(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const {
-      school,
-      degree,
-      fieldofstudy,
-      from,
-      to,
-      current,
-      description
-    } = req.body;
+    const { school, degree, fieldofstudy, from, to, current, description } = req.body;
 
     const newEdu = {
       school,
@@ -308,7 +288,7 @@ router.put(
       from,
       to,
       current,
-      description
+      description,
     };
 
     try {
@@ -323,20 +303,20 @@ router.put(
       console.error(err.message);
       res.status(500).send('Server Error');
     }
-  }
+  },
 );
 
 // @route    DELETE api/profile/education/:edu_id
 // @desc     Delete education from profile
 // @access   Private
 //router.delete('/education/:edu_id', auth, async (req, res) => {
-  //try {
-    //const profile = await Profile.findOne({ user: req.user.id });
+//try {
+//const profile = await Profile.findOne({ user: req.user.id });
 
-    // Get remove index
-    //const removeIndex = profile.education
-      //.map(item => item.id)
-      //.indexOf(req.params.edu_id);
+// Get remove index
+//const removeIndex = profile.education
+//.map(item => item.id)
+//.indexOf(req.params.edu_id);
 /*
     profile.education.splice(removeIndex, 1);
 
@@ -350,14 +330,14 @@ router.put(
 });
 */
 
-router.delete("/education/:edu_id", auth, async (req, res) => {
+router.delete('/education/:edu_id', auth, async (req, res) => {
   try {
     const foundProfile = await Profile.findOne({ user: req.user.id });
     const eduIds = foundProfile.education.map(edu => edu._id.toString());
     // if i dont add .toString() it returns this weird mongoose coreArray and the ids are somehow objects and it still deletes anyway even if you put /education/5
     const removeIndex = eduIds.indexOf(req.params.edu_id);
     if (removeIndex === -1) {
-      return res.status(500).json({ msg: "Server error" });
+      return res.status(500).json({ msg: 'Server error' });
     } else {
       // theses console logs helped me figure it out
       /*   console.log("eduIds", eduIds);
@@ -373,7 +353,7 @@ router.delete("/education/:edu_id", auth, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ msg: "Server error" });
+    return res.status(500).json({ msg: 'Server error' });
   }
 });
 // @route    GET api/profile/github/:username
@@ -382,13 +362,15 @@ router.delete("/education/:edu_id", auth, async (req, res) => {
 router.get('/github/:username', (req, res) => {
   try {
     const options = {
-      uri: encodeURI(`https://api.github.com/users/${
-        req.params.username
-      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
-        'githubClientId'
-      )}&client_secret=${config.get('githubSecret')}`),
+      uri: encodeURI(
+        `https://api.github.com/users/${
+          req.params.username
+        }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+          'githubClientId',
+        )}&client_secret=${config.get('githubSecret')}`,
+      ),
       method: 'GET',
-      headers: { 'user-agent': 'node.js' }
+      headers: { 'user-agent': 'node.js' },
     };
 
     request(options, (error, response, body) => {
@@ -400,6 +382,249 @@ router.get('/github/:username', (req, res) => {
 
       res.json(JSON.parse(body));
     });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+/// Friend Requests
+// Sender >>> Receiver
+// @route    POST api/profile/friend/:id(receiver user id)
+// @desc     Send a friend request to a user
+// @access   Private
+
+router.post('/friend/:id', auth, async (req, res) => {
+  try {
+    const receiver = await User.findById(req.params.id).select('-password');
+    const sender = await User.findById(req.user.id).select('-password');
+
+    // Check receiver database whether the sender has sent friend request to receiver or not
+    const isRequested = receiver.request.find(reques => reques.userId.toString() === req.user.id);
+    // Check receiver database whether the sender is already friend or not
+    const isFriend = receiver.friendsList.find(
+      friend => friend.friendId.toString() === req.user.id,
+    );
+    // Check sender database whether the sender has sent friend request to receiver or not
+    const isSentRequest = sender.sentRequest.find(
+      reques => reques.userId.toString() === req.params.id,
+    );
+
+    if (!isRequested && !isSentRequest && !isFriend) {
+      // Add to sentRequest array in the sender database
+      sender.sentRequest.push({
+        userId: req.params.id,
+        username: receiver.name,
+        avatar: receiver.avatar,
+      });
+
+      await sender.save();
+      // Add to request array in the receiver database
+      receiver.request.push({
+        userId: req.user.id,
+        username: sender.name,
+        avatar: sender.avatar,
+      });
+      // Increment total request in the receiver database
+      receiver.totalRequest += 1;
+
+      await receiver.save();
+      return res.json({
+        senderId: req.user.id,
+        senderName: sender.name,
+        senderAvatar: sender.avatar,
+        receiverId: req.params.id,
+        receiverName: receiver.name,
+        receiverAvatar: receiver.avatar,
+        msg: `Your friend request is successfully sent to ${receiver.name}`,
+        notification: `${sender.name} has sent a friend request`,
+      }); // @Todo
+    }
+
+    return res.status(404).json({ msg: 'Not found' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Receiver >>> Sender
+// @route    PUT api/profile/friend/:senderId
+// @desc     Accept a friend request
+// @access   Private
+
+router.put('/friend/:senderId', auth, async (req, res) => {
+  try {
+    const receiver = await User.findById(req.user.id).select('-password');
+    const sender = await User.findById(req.params.senderId).select('-password');
+
+    const isFriend = receiver.friendsList.find(
+      friend => friend.friendId.toString() === req.params.senderId,
+    );
+    const isFriendListOnSender = sender.friendsList.find(
+      friend => friend.friendId.toString() === req.user.id,
+    );
+
+    // Receiver must own request from sender in his database
+    const isRequested = receiver.request.find(
+      reques => reques.userId.toString() === req.params.senderId,
+    );
+    //receiver in friendListinde senderin userIdsi yoksa, bi zahmet ekle
+    // senderin friendListinde receiverin yoksa senderin friendListine ekle
+    if (!isFriend && !isFriendListOnSender && isRequested) {
+      // Add to Sender info to friendList array in the receiver database
+      receiver.friendsList.push({
+        friendId: req.params.senderId,
+        friendName: sender.name,
+        avatar: sender.avatar,
+      });
+      // Remove sender info from Receiver request database because they are going to be friend
+      const getSenderId = receiver.request
+        .map(reques => reques.userId.toString())
+        .indexOf(req.params.senderId);
+      receiver.request.splice(getSenderId, 1);
+
+      receiver.totalRequest -= 1;
+      await receiver.save();
+      // Add to Receiver info to friendList array in the sender database
+      sender.friendsList.push({
+        friendId: req.user.id,
+        friendName: receiver.name,
+        avatar: receiver.avatar,
+      });
+      // Remove Receiver info from Sender senrRequest database because they are going to be friend
+      const getReceiverId = sender.sentRequest
+        .map(reques => reques.userId.toString())
+        .indexOf(req.user.id);
+
+      sender.sentRequest.splice(getReceiverId, 1);
+
+      await sender.save();
+      return res.json({
+        receiverId: req.params.senderId,
+        receiverName: sender.name,
+        receiverAvatar: sender.avatar,
+        senderId: req.user.id,
+        senderName: receiver.name,
+        senderAvatar: receiver.avatar,
+        msg: `You have accepted ${sender.name} as a friend`,
+        notification: `${receiver.name} has accepted your friend request`,
+      }); // @Todo
+    }
+
+    return res.status(500).json({ msg: 'Server error' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Receiver >>> Sender
+// @route    PATCH api/profile/friend/:senderId
+// @desc     Cancel friend request
+// @access   Private
+
+router.patch('/friend/:senderId', auth, async (req, res) => {
+  try {
+    const receiver = await User.findById(req.user.id).select('-password');
+    const sender = await User.findById(req.params.senderId).select('-password');
+
+    // Receiver must own request from sender in his database
+    const isRequested = receiver.request.find(
+      reques => reques.userId.toString() === req.params.senderId,
+    );
+
+    // Sender must own receiver in his sentRequest database
+    const isSentRequest = sender.sentRequest.find(
+      reques => reques.userId.toString() === req.user.id,
+    );
+
+    if (isRequested && isSentRequest) {
+      // Remove sender request from receiver request database
+      const getSenderId = receiver.request
+        .map(reques => reques.userId.toString())
+        .indexOf(req.params.senderId);
+      receiver.request.splice(getSenderId, 1);
+      // Decrement total request of receiver
+      receiver.totalRequest -= 1;
+      await receiver.save();
+
+      // Remove sender request from sender sentRequest database
+
+      const getReceiverId = sender.sentRequest
+        .map(reques => reques.userId.toString())
+        .indexOf(req.user.id);
+
+      sender.sentRequest.splice(getReceiverId, 1);
+      await sender.save();
+      return res.json({
+        receiverId: req.params.senderId,
+        receiverName: sender.name,
+        receiverAvatar: sender.avatar,
+        senderId: req.user.id,
+        senderName: receiver.name,
+        senderAvatar: receiver.avatar,
+        msg: `You have rejected ${sender.name} friend request`,
+        notification: `${receiver.name} has rejected your friend request`,
+      }); // @Todo
+    }
+    return res.status(500).json({ msg: 'Server error' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Receiver >>> Sender
+// @route    DELETE api/profile/friend/:senderId
+// @desc     Break up the friendship
+// @access   Private
+
+router.delete('/friend/:senderId', auth, async (req, res) => {
+  try {
+    const receiver = await User.findById(req.user.id).select('-password');
+
+    const sender = await User.findById(req.params.senderId).select('-password');
+
+    // Check they are friends of each other
+
+    const isFriend = receiver.friendsList.find(
+      friend => friend.friendId.toString() === req.params.senderId,
+    );
+    const isFriendListOnSender = sender.friendsList.find(
+      friend => friend.friendId.toString() === req.user.id,
+    );
+
+    if (isFriend && isFriendListOnSender) {
+      // remove Sender Info from receiver friendList database. They are not friend right now
+      const getSenderId = receiver.friendsList
+        .map(friend => friend.friendId.toString())
+        .indexOf(req.params.senderId);
+
+      receiver.friendsList.splice(getSenderId, 1);
+      await receiver.save();
+
+      // remove receiver Info from sender friendList database. They are not friend right now
+      const getReceiverId = sender.friendsList
+        .map(friend => friend.friendId.toString())
+        .indexOf(req.user.id);
+
+      sender.friendsList.splice(getReceiverId, 1);
+
+      await sender.save();
+      return res.json({
+        receiverId: req.params.senderId,
+        receiverName: sender.name,
+        receiverAvatar: sender.avatar,
+        senderId: req.user.id,
+        senderName: receiver.name,
+        senderAvatar: receiver.avatar,
+        msg: `You are not a friend with ${sender.name}`,
+        notification: `${receiver.name} is not a friend of you`,
+      }); // @Todo
+    }
+
+    return res.status(500).json({ msg: 'Server error' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

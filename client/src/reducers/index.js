@@ -4,6 +4,7 @@ import auth from './auth';
 import profile from './profile';
 import post from './post';
 import notification from './notification';
+import chat from './chat';
 
 export default combineReducers({
   alert,
@@ -11,4 +12,5 @@ export default combineReducers({
   profile,
   post,
   notification,
+  chat,
 });

@@ -3,8 +3,12 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../actions/auth';
+import { receiveUsername } from '../../actions/chat';
 
-const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
+const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
+  const handleUser = () => {
+    receiveUsername(user.name);
+  };
   const authLinks = (
     <ul>
       <li>
@@ -23,6 +27,11 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         <Link to='/notification'>
           <i className='fas fa-bell' />
           {` `} <span className='hide-sm'>Notification</span>
+        </Link>
+      </li>
+      <li>
+        <Link to='/chats' onClick={handleUser}>
+          Chats
         </Link>
       </li>
       <li>

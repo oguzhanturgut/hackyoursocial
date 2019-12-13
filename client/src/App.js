@@ -10,6 +10,8 @@ import store from './store';
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 
+import { socketClient } from './utils/socketClient';
+
 import './App.css';
 
 if (localStorage.token) {
@@ -19,7 +21,9 @@ if (localStorage.token) {
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
-  }, []);
+    socketClient();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadUser]);
 
   return (
     <Provider store={store}>
@@ -27,7 +31,7 @@ const App = () => {
         <Fragment>
           <Navbar />
           <Switch>
-            <Route exact path='/' component={Landing} />
+            <Route exact path="/" component={Landing} />
             <Route component={Routes} />
           </Switch>
         </Fragment>
