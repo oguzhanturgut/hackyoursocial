@@ -1,10 +1,8 @@
 {
-  "mongoURI": "mongodb+srv://musafir928:000sun1016@devconnector-mrtxa.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "secret",
-  "emailSecret": "secret2",
-  "githubClientId": "4807401adfe078bad374",
-  "githubSecret": "6e069ffe38e4dd6fad7eb69c7d768e8b21dfad8d",
-  "email": "oguzhan@turgut.biz",
-  "emailPw": "4fsgsRekDYea",
+  "mongoURI": "mongodb+srv://class22admin:hyf12345@class22-database-vcbff.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "4Xy+=mGLTJUv$4^hZ$DY",
+  "emailSecret": "Hy?LDYYDe6b*5KmWNfKo",
+  "githubClientId": "8c715ca42cd3b8350a03",
+  "githubSecret": "0a1c0dab386db745a23d779e4409915735fdad37",
   "local_url": "http://localhost:3000"
 }

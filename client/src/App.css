@@ -14,11 +14,14 @@
 }
 
 body {
-  font-family: "Raleway", sans-serif;
+  font-family: 'Raleway', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   background-color: #fff;
   color: #333;
+}
+.text-bold {
+  font-weight: bold;
 }
 
 a {
@@ -39,7 +42,7 @@ img {
   max-width: 1100px;
   margin: auto;
   overflow: hidden;
-  padding: 0 2rem;
+  padding: 0 1.2rem;
   margin-top: 6rem;
   margin-bottom: 3rem;
 }
@@ -68,6 +71,10 @@ img {
 
 .text-primary {
   color: var(--primary-color) !important;
+}
+
+.text-dark {
+  color: var(--dark-color);
 }
 
 /* Padding */
@@ -240,7 +247,7 @@ img {
   margin-top: 0.3rem;
   color: #888;
 }
-input[type="search"] {
+input[type='search'] {
   display: block;
   width: 100%;
   padding: 0.4rem;
@@ -249,10 +256,10 @@ input[type="search"] {
   margin-bottom: 8px;
 }
 
-.form input[type="text"],
-.form input[type="email"],
-.form input[type="password"],
-.form input[type="date"],
+.form input[type='text'],
+.form input[type='email'],
+.form input[type='password'],
+.form input[type='date'],
 .form select,
 .form textarea {
   display: block;
@@ -262,7 +269,7 @@ input[type="search"] {
   border: 1px solid #ccc;
 }
 
-.form input[type="submit"],
+.form input[type='submit'],
 button {
   font: inherit;
 }
@@ -337,7 +344,7 @@ button {
 /* Landing Page */
 .landing {
   position: relative;
-  background: url("./img/showcase.jpg") no-repeat center center/cover;
+  background: url('./img/showcase.jpg') no-repeat center center/cover;
   height: 100vh;
 }
 
@@ -367,11 +374,7 @@ button {
 /* Profile Page */
 .profile-grid {
   display: grid;
-  grid-template-areas:
-    "top top"
-    "about about"
-    "exp edu"
-    "github github";
+  grid-template-areas: 'top top' 'about about' 'exp edu' 'github github';
   grid-gap: 1rem;
 }
 
@@ -457,6 +460,39 @@ button {
   flex-basis: 20%;
 }
 
+/* Notifications*/
+.notification {
+  display: grid;
+  grid-template-columns: 2fr 4fr;
+  grid-gap: 2rem;
+}
+
+.list {
+  font-size: 18px;
+}
+
+.notification .table th {
+  font-size: 18px;
+}
+
+.notification-item {
+  background-color: #fff;
+  color: #114ccc;
+  cursor: pointer;
+}
+
+.notification-hover {
+  background-color: #fff;
+  color: rgb(173, 165, 165);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.fa-trash:hover:before {
+  content: '\f2ed';
+  color: red;
+}
+
 /* Posts Page */
 .post-form .post-form-header {
   background: var(--primary-color);
@@ -492,6 +528,150 @@ button {
   margin-bottom: 0.5rem;
 }
 
+/* News feed */
+.news_feed {
+  display: flex;
+  padding: 20px 0 0;
+  margin-bottom: 14px;
+  box-shadow: -1px 1px 6px 0px #757c7d66;
+}
+
+.user_img {
+  border-radius: 10%;
+  width: 48px;
+  height: 48px;
+  margin: 15px 5px 0 10px;
+}
+
+.post_news {
+  font-size: 15px;
+  padding: 10px;
+  width: 100%;
+}
+.post_notification {
+  color: #17a2b8;
+  font-size: 11px;
+}
+.news_text {
+  color: #000;
+}
+
+.news_social {
+  margin: 5px;
+  color: #2e8793;
+}
+.more_news {
+  color: #2e8793;
+  font-style: italic;
+  transition: color 0.6s;
+}
+.more_news:hover {
+  color: #123438;
+}
+/* Mobile Styles */
+@media (max-width: 700px) {
+  .container {
+    margin-top: 8rem;
+  }
+
+  .hide-sm {
+    display: none;
+  }
+
+  /* Text Styles */
+  .x-large {
+    font-size: 3rem;
+  }
+
+  .large {
+    font-size: 2rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+  }
+
+  /* Navbar */
+  .navbar {
+    display: block;
+    text-align: center;
+  }
+
+  .navbar ul {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .navbar h1 {
+    margin-bottom: 1rem;
+  }
+
+  .navbar .welcome {
+    display: none;
+  }
+
+  /* Profiles Page */
+  .profile {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .profile ul {
+    display: none;
+  }
+
+  /* Profile Page */
+
+  .profile-top img,
+  .profile img {
+    width: 200px;
+    margin: auto;
+  }
+
+  .profile-grid {
+    grid-template-areas: 'top' 'about' 'exp' 'edu' 'github';
+  }
+
+  .profile-about .skills {
+    flex-direction: column;
+  }
+
+  .dash-buttons a {
+    display: block;
+    width: 100%;
+    margin-bottom: 0.2rem;
+  }
+
+  .post {
+    grid-template-columns: 1fr;
+  }
+  .post a,
+  .post button {
+    padding: 0.3rem 0.4rem;
+  }
+}
+
+@media (min-width: 700px) {
+  .news_feed {
+    width: 70%;
+  }
+  .user_img {
+    border-radius: 10%;
+    width: 60px;
+    height: 60px;
+  }
+
+  .post_news {
+    font-size: 18px;
+  }
+
+  .news_social {
+    font-size: 20px;
+  }
+  .more_news {
+    cursor: pointer;
+  }
+}
 /* Friends Page */
 .friend-card {
   border: #ccc solid 1px;
@@ -533,7 +713,7 @@ button {
   color: white;
 }
 
-input[class="search-txt"] {
+input[class='search-txt'] {
   border: none;
   background: none;
   padding: 6px 0 0 20px;
@@ -541,10 +721,10 @@ input[class="search-txt"] {
   outline-width: 0;
 }
 
-input[class="search-txt"]::-webkit-search-decoration,
-input[class="search-txt"]::-webkit-search-cancel-button,
-input[class="search-txt"]::-webkit-search-results-button,
-input[class="search-txt"]::-webkit-search-results-decoration {
+input[class='search-txt']::-webkit-search-decoration,
+input[class='search-txt']::-webkit-search-cancel-button,
+input[class='search-txt']::-webkit-search-results-button,
+input[class='search-txt']::-webkit-search-results-decoration {
   -webkit-appearance: none;
 }
 
@@ -610,11 +790,11 @@ input[class="search-txt"]::-webkit-search-results-decoration {
 
   .profile-grid {
     grid-template-areas:
-      "top"
-      "about"
-      "exp"
-      "edu"
-      "github";
+      'top'
+      'about'
+      'exp'
+      'edu'
+      'github';
   }
 
   .profile-about .skills {
@@ -627,9 +807,20 @@ input[class="search-txt"]::-webkit-search-results-decoration {
     margin-bottom: 0.2rem;
   }
 
+  /* Notification */
+  .notification {
+    grid-template-columns: 1fr;
+  }
+
+  .notification .table th,
+  .notification .table td {
+    font-size: 1rem;
+  }
+
   .post {
     grid-template-columns: 1fr;
   }
+
   .post a,
   .post button {
     padding: 0.3rem 0.4rem;
@@ -667,7 +858,7 @@ input[class="search-txt"]::-webkit-search-results-decoration {
 }
 .chat-user-container h6 {
   color: #0c9463;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 1.5rem;
   background-color: #2d334a65;
 }
@@ -711,7 +902,7 @@ input[class="search-txt"]::-webkit-search-results-decoration {
   padding: 1.5rem !important;
   width: 20rem;
   line-height: 1.5;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #212529;
   word-break: break-all;
 }
@@ -782,7 +973,53 @@ div.header {
   background-color: #343a40;
 }
 
+@media (max-width: 980px) {
+  .friend-list a {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 728px) {
+  .chat-user-container {
+    top: 100px;
+  }
+}
+
+@media (max-width: 600px) {
+  .user-chat-box {
+    max-width: 100vw;
+  }
+  .guest-chat-box {
+    max-width: 100vw;
+  }
+
+  .chat-message-container {
+    width: 80%;
+  }
+
+  .chat-body {
+    width: 60%;
+    font-size: 0.75rem;
+  }
+
+  .chat-body .primary-font {
+    white-space: nowrap;
+  }
+
+  .chat-user-container h6 {
+    font-size: 0.75rem;
+  }
+
+  .chat-user-container {
+    font-size: 0.75rem;
+    overflow: auto;
+  }
+}
 /* pagination */
+
 .pagination {
   display: -ms-flexbox;
   display: flex;
