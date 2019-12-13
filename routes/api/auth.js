@@ -90,7 +90,7 @@ router.put(
 
       // To hide if the user is registered or not. (Social engineering attack)
       if (!user)
-      return res.json({
+        return res.json({
           msg: `Email has been sent to ${email}. Follow the instructions to reset your password.`,
         });
 

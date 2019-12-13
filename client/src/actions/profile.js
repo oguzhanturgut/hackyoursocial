@@ -42,7 +42,6 @@ export const getProfiles = () => async dispatch => {
   } catch (err) {
     const res = await caches.match('/api/profile');
     const data = await res.json();
-    console.log('data: ', data);
     dispatch({
       type: GET_PROFILES,
       payload: data,

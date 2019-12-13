@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { sendFriendRequest } from "../../actions/auth";
 import moment from "moment";
 import Moment from "react-moment";
-
 const ProfileItem = ({
   sendFriendRequest,
   profile: {
@@ -18,12 +17,13 @@ const ProfileItem = ({
   auth: { user, isAuthenticated }
 }) => {
   const Button = () => {
-    const isFriend = user.friendsList.filter(friend => friend.friendId === _id);
-    const isRequested = user.request.filter(req => req.userId === _id);
-    const isSent = user.sentRequest.filter(sendReq => sendReq.userId === _id);
-    const isLoggedUser = user._id === _id;
-
-    if (isAuthenticated && !isLoggedUser) {
+    if (!isAuthenticated) return <></>;
+    if (isAuthenticated && user._id !== _id) {
+      const isFriend = user.friendsList.filter(
+        friend => friend.friendId === _id
+      );
+      const isRequested = user.request.filter(req => req.userId === _id);
+      const isSent = user.sentRequest.filter(sendReq => sendReq.userId === _id);
       if (isFriend.length > 0) {
         return (
           <p className='text-primary my-1'>
@@ -34,7 +34,6 @@ const ProfileItem = ({
           </p>
         );
       }
-
       if (isRequested.length > 0) {
         return (
           <p className='text-primary my-1'>
@@ -45,7 +44,6 @@ const ProfileItem = ({
           </p>
         );
       }
-
       if (isSent.length > 0) {
         return (
           <p className='text-primary my-1'>
@@ -57,11 +55,9 @@ const ProfileItem = ({
           </p>
         );
       }
-
       if (_id === user._id) {
         return <></>;
       }
-
       return (
         <button
           className='btn btn-success'
@@ -73,7 +69,6 @@ const ProfileItem = ({
     }
     return <></>;
   };
-
   return (
     <div className='profile bg-light'>
       <img src={avatar} alt='' className='round-img' />
@@ -98,7 +93,6 @@ const ProfileItem = ({
     </div>
   );
 };
-
 ProfileItem.propTypes = {
   profile: PropTypes.object.isRequired,
   isAuthenticated: PropTypes.bool,
@@ -108,5 +102,4 @@ ProfileItem.propTypes = {
 const mapStateToProps = state => ({
   auth: state.auth
 });
-
 export default connect(mapStateToProps, { sendFriendRequest })(ProfileItem);

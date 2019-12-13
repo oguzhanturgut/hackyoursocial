@@ -240,10 +240,7 @@ router.delete('/experience/:exp_id', auth, async (req, res) => {
       return res.status(500).json({ msg: 'Server error' });
     } else {
       // theses console logs helped me figure it out
-      console.log('expIds', expIds);
-      console.log('typeof expIds', typeof expIds);
-      console.log('req.params', req.params);
-      console.log('removed', expIds.indexOf(req.params.exp_id));
+
       foundProfile.experience.splice(removeIndex, 1);
       await foundProfile.save();
       return res.status(200).json(foundProfile);

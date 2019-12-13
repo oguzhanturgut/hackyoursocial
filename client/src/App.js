@@ -20,8 +20,8 @@ if (localStorage.token) {
 
 const App = () => {
   useEffect(() => {
-    socketClient();
     store.dispatch(loadUser());
+    socketClient();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadUser]);
 

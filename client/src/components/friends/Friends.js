@@ -1,5 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
