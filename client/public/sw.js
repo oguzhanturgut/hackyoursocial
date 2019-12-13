@@ -71,11 +71,11 @@ const isStaticAsset = (requestUrl, array) => {
   return array.indexOf(cachePath) > -1;
 };
 
-const apis = [`${self.location.origin}/api/profile`];
-
 // Cache then network with fallback & dynamic caching
 self.addEventListener('fetch', event => {
-  if (apis.includes(event.request.url)) {
+  if (event.request.url === `${self.location.origin}/api/auth`) {
+    event.respondWith(fetch(event.request));
+  } else if (event.request.url === `${self.location.origin}/api/profile`) {
     event.respondWith(
       caches.open(CURRENT_CACHES.dynamic).then(cache => {
         return fetch(event.request).then(response => {
