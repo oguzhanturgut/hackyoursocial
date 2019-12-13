@@ -40,10 +40,16 @@ export const getProfiles = () => async dispatch => {
       payload: res.data,
     });
   } catch (err) {
+    const res = await caches.match('/api/profile');
+    const data = await res.json();
     dispatch({
-      type: PROFILE_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
+      type: GET_PROFILES,
+      payload: data,
     });
+    // dispatch({
+    //   type: PROFILE_ERROR,
+    //   payload: { msg: err.response.statusText, status: err.response.status }
+    // });
   }
 };
 

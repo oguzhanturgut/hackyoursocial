@@ -10,20 +10,21 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     name: '',
     email: '',
     password: '',
-    password2: ''
+    password2: '',
   });
+  const [isMailSent, setIsMailSent] = useState(false);
 
   const { name, email, password, password2 } = formData;
 
-  const onChange = e =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
+    setIsMailSent(false);
     e.preventDefault();
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger');
     } else {
-      register({ name, email, password });
+      (await register({ name, email, password })) && setIsMailSent(true);
     }
   };
 
@@ -31,7 +32,14 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     return <Redirect to='/dashboard' />;
   }
 
-  return (
+  return isMailSent ? (
+    <Fragment>
+      <h1 className='large text-primary'>Confirm Email</h1>
+      <p className='lead'>
+        <i className='fas fa-mail'></i> Confirmation mail is sent to {email}
+      </p>
+    </Fragment>
+  ) : (
     <Fragment>
       <h1 className='large text-primary'>Sign Up</h1>
       <p className='lead'>
@@ -56,8 +64,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             onChange={e => onChange(e)}
           />
           <small className='form-text'>
-            This site uses Gravatar so if you want a profile image, use a
-            Gravatar email
+            This site uses Gravatar so if you want a profile image, use a Gravatar email
           </small>
         </div>
         <div className='form-group'>
@@ -90,14 +97,11 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(
-  mapStateToProps,
-  { setAlert, register }
-)(Register);
+export default connect(mapStateToProps, { setAlert, register })(Register);

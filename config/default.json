@@ -1,6 +1,8 @@
 {
-  "mongoURI": "mongodb+srv://Shyar:shiyar-baravi@connecter-zulu0.azure.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "shyar_jwt",
-  "githubClientId": "Iv1.2681987686c204ee",
-  "githubSecret": "78fcff3f8317400bec1031155a7ad9cb577152b3"
+  "mongoURI": "mongodb+srv://class22admin:hyf12345@class22-database-vcbff.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "4Xy+=mGLTJUv$4^hZ$DY",
+  "emailSecret": "Hy?LDYYDe6b*5KmWNfKo",
+  "githubClientId": "8c715ca42cd3b8350a03",
+  "githubSecret": "0a1c0dab386db745a23d779e4409915735fdad37",
+  "local_url": "http://localhost:3000"
 }
