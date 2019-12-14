@@ -147,6 +147,10 @@ router.delete('/', auth, async (req, res) => {
     await Profile.findOneAndRemove({ user: req.user.id });
     // Remove user
     await User.findOneAndRemove({ _id: req.user.id });
+    // Remove from the others friendList and request and sentRequest
+    await User.update({}, { $pull: { friendsList: { friendId: req.user.id } } }, { multi: true });
+    await User.update({}, { $pull: { request: { userId: req.user.id } } }, { multi: true });
+    await User.update({}, { $pull: { sentRequest: { userId: req.user.id } } }, { multi: true });
 
     res.json({ msg: 'User deleted' });
   } catch (err) {
