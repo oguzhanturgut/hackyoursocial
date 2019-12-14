@@ -42,10 +42,10 @@ export const loadSocialUser = () => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
-  console.log(localStorage.token);
+
   try {
     const res = await axios.get('/api/auth/facebook');
-    console.log(res.data);
+
     dispatch({
       type: SOCIAL_USER_LOADED,
       payload: res.data,
@@ -63,10 +63,10 @@ export const loadSocialUserGoogle = () => async dispatch => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
-  console.log(localStorage.token);
+
   try {
     const res = await axios.get('/api/auth/google');
-    console.log(res.data);
+
     dispatch({
       type: SOCIAL_USER_LOADED,
       payload: res.data,
@@ -165,7 +165,7 @@ export const handleSocialLogin = (email, password) => async dispatch => {
       type: LOGIN_SUCCESS,
       payload: res.data,
     });
-    console.log(res);
+
     dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
@@ -183,7 +183,7 @@ export const handleSocialLogin = (email, password) => async dispatch => {
 export const handleLoginFacebook = () => async dispatch => {
   const provider = new firebase.auth.FacebookAuthProvider();
   const result = await firebase.auth().signInWithPopup(provider);
-  console.log(result);
+
   // const _id = result.user.uid;
   let name = result.user.displayName;
   const avatar = result.user.providerData[0].photoURL;
@@ -196,7 +196,7 @@ export const handleLoginFacebook = () => async dispatch => {
       'Content-Type': 'application/json',
     },
   };
-  console.log('pass' + password);
+
   const body = JSON.stringify({ name, email, avatar, password });
 
   try {
@@ -223,7 +223,7 @@ export const handleLoginFacebook = () => async dispatch => {
 export const handleLoginGoogle = () => async dispatch => {
   const provider = new firebase.auth.GoogleAuthProvider();
   const result = await firebase.auth().signInWithPopup(provider);
-  console.log(result);
+
   // const _id = result.user.uid;
   let name = result.user.displayName;
   const avatar = result.user.providerData[0].photoURL;
