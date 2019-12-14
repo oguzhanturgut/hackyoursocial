@@ -29,6 +29,7 @@ export const loadUser = () => async dispatch => {
       type: USER_LOADED,
       payload: res.data,
     });
+    socketEmit(res);
   } catch (err) {
     dispatch({
       type: AUTH_ERROR,
@@ -49,7 +50,6 @@ export const loadSocialUser = () => async dispatch => {
       type: SOCIAL_USER_LOADED,
       payload: res.data,
     });
-    socketEmit(res);
   } catch (err) {
     dispatch({
       type: AUTH_ERROR,
