@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 3;
+const CACHE_VERSION = 4;
 const CURRENT_CACHES = {
   static: `static-v${CACHE_VERSION}`,
   dynamic: `dynamic-v${CACHE_VERSION}`,
@@ -8,7 +8,6 @@ const STATIC_FILES = [
   '/',
   '/index.html',
   '/offline.html',
-  '/static/media/showcase.4b31330b.jpg',
   '/static/js/bundle.js',
   '/static/js/0.chunk.js',
   '/static/js/main.chunk.js',
