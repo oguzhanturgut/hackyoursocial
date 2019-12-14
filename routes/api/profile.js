@@ -445,11 +445,22 @@ router.post('/friend/:id', auth, async (req, res) => {
 router.put('/friend/:senderId', auth, async (req, res) => {
   try {
     const receiver = await User.findById(req.user.id).select('-password');
-    const sender = await User.findById(req.params.senderId).select('-password');
-
     const isFriend = receiver.friendsList.find(
       friend => friend.friendId.toString() === req.params.senderId,
     );
+
+    const sender = await User.findById(req.params.senderId).select('-password');
+    if (!sender) {
+      const getSenderId = receiver.request
+        .map(reques => reques.userId.toString())
+        .indexOf(req.params.senderId);
+      //remove user because he removed the account doesnt exist
+      receiver.request.splice(getSenderId, 1);
+      receiver.totalRequest -= 1;
+      await receiver.save();
+      return res.status(400).json({ msg: 'Profile not found' });
+    }
+
     const isFriendListOnSender = sender.friendsList.find(
       friend => friend.friendId.toString() === req.user.id,
     );
@@ -504,24 +515,36 @@ router.put('/friend/:senderId', auth, async (req, res) => {
     return res.status(500).json({ msg: 'Server error' });
   } catch (err) {
     console.error(err.message);
+    console.error(err.kind);
     res.status(500).send('Server Error');
   }
 });
 
 // Receiver >>> Sender
 // @route    PATCH api/profile/friend/:senderId
-// @desc     Cancel friend request
+// @desc     Cancel/Reject friend request
 // @access   Private
 
 router.patch('/friend/:senderId', auth, async (req, res) => {
   try {
     const receiver = await User.findById(req.user.id).select('-password');
-    const sender = await User.findById(req.params.senderId).select('-password');
-
     // Receiver must own request from sender in his database
     const isRequested = receiver.request.find(
       reques => reques.userId.toString() === req.params.senderId,
     );
+
+    const sender = await User.findById(req.params.senderId).select('-password');
+
+    if (!sender) {
+      const getSenderId = receiver.request
+        .map(reques => reques.userId.toString())
+        .indexOf(req.params.senderId);
+      //remove user because he removed the account doesnt exist
+      receiver.request.splice(getSenderId, 1);
+      receiver.totalRequest -= 1;
+      await receiver.save();
+      return res.status(400).json({ msg: 'Profile not found' });
+    }
 
     // Sender must own receiver in his sentRequest database
     const isSentRequest = sender.sentRequest.find(
@@ -566,7 +589,7 @@ router.patch('/friend/:senderId', auth, async (req, res) => {
 
 // Receiver >>> Sender
 // @route    DELETE api/profile/friend/:senderId
-// @desc     Break up the friendship
+// @desc     Break up the friendship / Unfriend
 // @access   Private
 
 router.delete('/friend/:senderId', auth, async (req, res) => {
@@ -574,6 +597,16 @@ router.delete('/friend/:senderId', auth, async (req, res) => {
     const receiver = await User.findById(req.user.id).select('-password');
 
     const sender = await User.findById(req.params.senderId).select('-password');
+
+    if (!sender) {
+      const getSenderId = receiver.friendsList
+        .map(friend => friend.friendId.toString())
+        .indexOf(req.params.senderId);
+
+      receiver.friendsList.splice(getSenderId, 1);
+      await receiver.save();
+      return res.status(400).json({ msg: 'Profile not found' });
+    }
 
     // Check they are friends of each other
 
