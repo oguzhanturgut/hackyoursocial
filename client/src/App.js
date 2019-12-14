@@ -21,12 +21,15 @@ if (localStorage.token) {
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
-    reactGA.initialize('UA-153483511-1');
-    // to report page view
-    reactGA.pageview(window.location.pathname + window.location.search);
     socketClient();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadUser]);
+
+  useEffect(() => {
+    reactGA.initialize('UA-153483511-1');
+    // to report page view
+    reactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
 
   return (
     <Provider store={store}>
