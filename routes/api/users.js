@@ -8,7 +8,6 @@ const { check, validationResult } = require('express-validator/check');
 const sendMail = require('../../utils/sendMail');
 
 const HOST_ADDR = process.env.HOST_ADDR || config.get('local_url');
-console.log(HOST_ADDR);
 
 const User = require('../../models/User');
 

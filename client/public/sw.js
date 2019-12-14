@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 2;
+const CACHE_VERSION = 3;
 const CURRENT_CACHES = {
   static: `static-v${CACHE_VERSION}`,
   dynamic: `dynamic-v${CACHE_VERSION}`,
