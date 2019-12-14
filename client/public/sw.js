@@ -8,6 +8,7 @@ const STATIC_FILES = [
   '/',
   '/index.html',
   '/offline.html',
+  '/static/media/showcase.b9075165.jpg',
   '/static/js/bundle.js',
   '/static/js/0.chunk.js',
   '/static/js/main.chunk.js',
