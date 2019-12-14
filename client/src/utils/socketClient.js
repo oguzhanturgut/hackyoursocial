@@ -9,7 +9,7 @@ import { loadUser } from './../actions/auth';
 //   process.env.HOSTNAME = "localhost:5000";
 // }
 
-export const socket = io('http://localhost:5000');
+export const socket = io();
 
 export const socketClient = () => {
   socket.on('sendFriendRequest', data => {
