@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 1;
+const CACHE_VERSION = 2;
 const CURRENT_CACHES = {
   static: `static-v${CACHE_VERSION}`,
   dynamic: `dynamic-v${CACHE_VERSION}`,
@@ -73,7 +73,7 @@ const isStaticAsset = (requestUrl, array) => {
 
 // Cache then network with fallback & dynamic caching
 self.addEventListener('fetch', event => {
-  if (event.request.url.includes('/api/') || event.request.url.includes('socket')) {
+  if (event.request.url.includes('/api/') || event.request.url.includes('sock')) {
     event.respondWith(fetch(event.request));
   } else if (isStaticAsset(event.request.url, STATIC_FILES)) {
     event.respondWith(caches.match(event.request));
