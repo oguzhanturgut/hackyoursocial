@@ -73,7 +73,7 @@ const isStaticAsset = (requestUrl, array) => {
 
 // Cache then network with fallback & dynamic caching
 self.addEventListener('fetch', event => {
-  if (event.request.url.includes('/api/')) {
+  if (event.request.url.includes('/api/') || event.request.url.includes('socket')) {
     event.respondWith(fetch(event.request));
   } else if (isStaticAsset(event.request.url, STATIC_FILES)) {
     event.respondWith(caches.match(event.request));
