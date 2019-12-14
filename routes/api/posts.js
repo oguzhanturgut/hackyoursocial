@@ -124,7 +124,6 @@ router.put('/like/:id', auth, async (req, res) => {
 
     await post.save();
 
-    res.json(post.likes);
     console.log(`${user.name} liked your post`);
 
     const newNotification = new Notification({
@@ -136,9 +135,10 @@ router.put('/like/:id', auth, async (req, res) => {
       postTo: post.id,
     });
 
-    const notification = await newNotification.save();
+    await newNotification.save();
 
-    res.json(notification);
+    // res.json(notification);
+    res.json(post.likes);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -165,7 +165,6 @@ router.put('/unlike/:id', auth, async (req, res) => {
 
     await post.save();
 
-    res.json(post.likes);
     console.log(`${user.name} unliked your post`);
 
     const newNotification = new Notification({
@@ -177,9 +176,9 @@ router.put('/unlike/:id', auth, async (req, res) => {
       postTo: post.id,
     });
 
-    const notification = await newNotification.save();
-
-    res.json(notification);
+    await newNotification.save();
+    res.json(post.likes);
+    // res.json(notification);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
@@ -218,7 +217,7 @@ router.post(
 
       post.comments.unshift(newComment);
       await post.save();
-      res.json(post.comments);
+
       console.log(`${user.name} commented your post`);
 
       const newNotification = new Notification({
@@ -230,9 +229,10 @@ router.post(
         postTo: post.id,
       });
 
-      const notification = await newNotification.save();
+      await newNotification.save();
 
-      res.json(notification);
+      // res.json(notification);
+      res.json(post.comments);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server Error');
@@ -267,7 +267,7 @@ router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
     post.comments.splice(removeIndex, 1);
 
     await post.save();
-    res.json(post.comments);
+
     console.log(`${user.name} deleted comment from your post`);
 
     const newNotification = new Notification({
@@ -279,9 +279,10 @@ router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
       postTo: post.id,
     });
 
-    const notification = await newNotification.save();
+    await newNotification.save();
 
-    res.json(notification);
+    // res.json(notification);
+    res.json(post.comments);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

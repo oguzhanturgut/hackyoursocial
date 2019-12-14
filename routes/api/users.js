@@ -76,7 +76,7 @@ router.post(
         subject: 'Confirm your email address',
         text: `Hurrah! You've created a Hack Your Social account with ${user.email}.
         Please take a moment to confirm that we can use this address to send you mails.: ${confirmURL}`,
-        html: `<h3>Hello ${user.name}</h3><p>Hurrah! You've created a Developer Hub account with ${user.email}.</p> <p>There’s just one step left to use your account.Please take a moment to confirm that we can use this address to send you mails.</p>
+        html: `<h3>Hello ${user.name}</h3><p>Hurrah! You've created a Hack Your Social account with ${user.email}.</p> <p>There’s just one step left to use your account.Please take a moment to confirm that we can use this address to send you mails.</p>
         <p><a href='${confirmURL}'>Click here to confirm your email address.</a></p>`,
       };
 
@@ -160,7 +160,7 @@ router.post(
         subject: 'Confirm your email address',
         text: `Hurrah! You've created a Hack Your Social account with ${user.email}.
         Please take a moment to confirm that we can use this address to send you mails.: ${confirmURL}`,
-        html: `<h3>Hello ${user.name}</h3><p>Hurrah! You've created a Developer Hub account with ${user.email}.</p> <p>There’s just one step left to use your account.Please take a moment to confirm that we can use this address to send you mails.</p>
+        html: `<h3>Hello ${user.name}</h3><p>Hurrah! You've created a Hack Your Social account with ${user.email}.</p> <p>There’s just one step left to use your account.Please take a moment to confirm that we can use this address to send you mails.</p>
         <p><a href='${confirmURL}'>Click here to confirm your email address.</a></p>`,
       };
 
