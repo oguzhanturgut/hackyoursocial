@@ -1,31 +1,28 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const gravatar = require("gravatar");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const { check, validationResult } = require("express-validator/check");
-const sendMail = require("../../utils/sendMail");
+const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const { check, validationResult } = require('express-validator/check');
+const sendMail = require('../../utils/sendMail');
 
-const HOST_ADDR = process.env.HOST_ADDR || config.get("local_url");
+const HOST_ADDR = process.env.HOST_ADDR || config.get('local_url');
 console.log(HOST_ADDR);
 
-const User = require("../../models/User");
+const User = require('../../models/User');
 
 // @route    POST api/users
 // @desc     Register user
 // @access   Public
 router.post(
-  "/",
+  '/',
   [
-    check("name", "Name is required")
+    check('name', 'Name is required')
       .not()
       .isEmpty(),
-    check("email", "Please include a valid email").isEmail(),
-    check(
-      "password",
-      "Please enter a password with 6 or more characters"
-    ).isLength({ min: 6 })
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -39,23 +36,21 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "User already exists" }] });
+        return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
       }
 
       const avatar = gravatar.url(email, {
-        protocol: "https",
-        s: "200",
-        r: "pg",
-        d: "mm"
+        protocol: 'https',
+        s: '200',
+        r: 'pg',
+        d: 'mm',
       });
 
       user = new User({
         name,
         email,
         avatar,
-        password
+        password,
       });
 
       const salt = await bcrypt.genSalt(10);
@@ -66,75 +61,64 @@ router.post(
 
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
-      const emailToken = jwt.sign(payload, config.get("emailSecret"), {
-        expiresIn: "1d"
+      const emailToken = jwt.sign(payload, config.get('emailSecret'), {
+        expiresIn: '1d',
       });
       const confirmURL = `${HOST_ADDR}/confirm/${emailToken}`;
 
       const msg = {
         to: user.email,
-        from: process.env.MAIL_USER || config.get("email"),
-        subject: "Confirm your email address",
+        from: process.env.MAIL_USER || config.get('email'),
+        subject: 'Confirm your email address',
         text: `Hurrah! You've created a Hack Your Social account with ${user.email}.
         Please take a moment to confirm that we can use this address to send you mails.: ${confirmURL}`,
         html: `<h3>Hello ${user.name}</h3><p>Hurrah! You've created a Developer Hub account with ${user.email}.</p> <p>There’s just one step left to use your account.Please take a moment to confirm that we can use this address to send you mails.</p>
-        <p><a href='${confirmURL}'>Click here to confirm your email address.</a></p>`
+        <p><a href='${confirmURL}'>Click here to confirm your email address.</a></p>`,
       };
 
       await sendMail(msg);
-      res.json({ msg: "Confirmation mail sent" });
+      res.json({ msg: 'Confirmation mail sent' });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
-  }
+  },
 );
 
 // @route   PUT /api/users/confirm/:emailToken
 // @desc    Confirm user email
 // @access  Public
-router.put("/confirm/:emailToken", async (req, res) => {
+router.put('/confirm/:emailToken', async (req, res) => {
   const { emailToken } = req.params;
   try {
     const {
-      user: { id }
-    } = jwt.verify(emailToken, config.get("emailSecret"));
+      user: { id },
+    } = jwt.verify(emailToken, config.get('emailSecret'));
     const user = await User.findOne({ _id: id });
-    let msg = "";
+    let msg = '';
     if (user.confirmed) {
-      msg = "Email is already confirmed";
+      msg = 'Email is already confirmed';
     }
-    await User.findOneAndUpdate(
-      { _id: id },
-      { $set: { confirmed: true } },
-      { new: true }
-    );
+    await User.findOneAndUpdate({ _id: id }, { $set: { confirmed: true } }, { new: true });
     const payload = {
       user: {
-        id
-      }
+        id,
+      },
     };
 
-    jwt.sign(
-      payload,
-      config.get("jwtSecret"),
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token, msg });
-      }
-    );
+    jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+      if (err) throw err;
+      res.json({ token, msg });
+    });
   } catch (error) {
-    if (error.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .send({ errors: [{ msg: "Email validation link expired" }] });
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).send({ errors: [{ msg: 'Email validation link expired' }] });
     } else {
-      return res.status(401).send({ errors: [{ msg: "Invalid Token" }] });
+      return res.status(401).send({ errors: [{ msg: 'Invalid Token' }] });
     }
   }
 });
@@ -143,8 +127,8 @@ router.put("/confirm/:emailToken", async (req, res) => {
 // @desc    Resend confirmation email
 // @access  Public
 router.post(
-  "/resend",
-  [check("email", "Please include a valid email").isEmail()],
+  '/resend',
+  [check('email', 'Please include a valid email').isEmail()],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -155,44 +139,44 @@ router.post(
       const user = await User.findOne({ email });
       if (!user) {
         return res.status(400).json({
-          errors: [{ msg: `No user found registered with ${email}` }]
+          errors: [{ msg: `No user found registered with ${email}` }],
         });
       }
 
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
-      const emailToken = jwt.sign(payload, config.get("emailSecret"), {
-        expiresIn: "1d"
+      const emailToken = jwt.sign(payload, config.get('emailSecret'), {
+        expiresIn: '1d',
       });
       const confirmURL = `${HOST_ADDR}/confirm/${emailToken}`;
 
       const msg = {
         to: user.email,
-        from: process.env.MAIL_USER || config.get("email"),
-        subject: "Confirm your email address",
+        from: process.env.MAIL_USER || config.get('email'),
+        subject: 'Confirm your email address',
         text: `Hurrah! You've created a Hack Your Social account with ${user.email}.
         Please take a moment to confirm that we can use this address to send you mails.: ${confirmURL}`,
         html: `<h3>Hello ${user.name}</h3><p>Hurrah! You've created a Developer Hub account with ${user.email}.</p> <p>There’s just one step left to use your account.Please take a moment to confirm that we can use this address to send you mails.</p>
-        <p><a href='${confirmURL}'>Click here to confirm your email address.</a></p>`
+        <p><a href='${confirmURL}'>Click here to confirm your email address.</a></p>`,
       };
 
       await sendMail(msg);
-      res.json({ msg: "Confirmation mail sent" });
+      res.json({ msg: 'Confirmation mail sent' });
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server error");
+      res.status(500).send('Server error');
     }
-  }
+  },
 );
 
 // @route    POST api/users/facebook
 // @desc     Register user
 // @access   Public
-router.post("/facebook", async (req, res) => {
+router.post('/facebook', async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -206,65 +190,53 @@ router.post("/facebook", async (req, res) => {
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
+        return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    }
+      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+        if (err) throw err;
+        return res.json({ token });
+      });
+    } else {
+      user = new User({
+        name,
+        email,
+        avatar,
+        password,
+      });
+      const salt = await bcrypt.genSalt(10);
 
-    user = new User({
-      name,
-      email,
-      avatar,
-      password
-    });
-    const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
 
-    user.password = await bcrypt.hash(password, salt);
+      await user.save();
 
-    await user.save();
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
 
-    const payload = {
-      user: {
-        id: user.id
-      }
-    };
-
-    jwt.sign(
-      payload,
-      config.get("jwtSecret"),
-      { expiresIn: 360000 },
-      (err, token) => {
+      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
         if (err) throw err;
         res.json({ token });
-      }
-    );
+      });
+    }
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    return res.status(500).send('Server error');
   }
 });
 
 // @route    POST api/users/google
 // @desc     Register user
 // @access   Public
-router.post("/google", async (req, res) => {
+router.post('/google', async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -278,58 +250,46 @@ router.post("/google", async (req, res) => {
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid Credentials" }] });
+        return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    }
-
-    user = new User({
-      name,
-      email,
-      avatar,
-      password
-    });
-    const salt = await bcrypt.genSalt(10);
-
-    user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
-
-    const payload = {
-      user: {
-        id: user.id
-      }
-    };
-
-    jwt.sign(
-      payload,
-      config.get("jwtSecret"),
-      { expiresIn: 360000 },
-      (err, token) => {
+      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
         if (err) throw err;
-        res.json({ token });
-      }
-    );
+        return res.json({ token });
+      });
+    } else {
+      user = new User({
+        name,
+        email,
+        avatar,
+        password,
+      });
+      const salt = await bcrypt.genSalt(10);
+
+      user.password = await bcrypt.hash(password, salt);
+
+      await user.save();
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
+        if (err) throw err;
+        return res.json({ token });
+      });
+    }
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send('Server error');
   }
 });
 
