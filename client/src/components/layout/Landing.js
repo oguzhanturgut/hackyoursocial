@@ -32,10 +32,10 @@ const Landing = ({ isAuthenticated, handleLoginFacebook, handleLoginGoogle, acce
               Login
             </Link>
           </div>
-          <FacebookLoginButton
+          {/* <FacebookLoginButton
             onClick={() => handleLoginFacebook(accessToken)}
             style={{ fontSize: '1rem', width: '13rem' }}
-          />
+          /> */}
           <GoogleLoginButton
             onClick={() => handleLoginGoogle(accessToken)}
             style={{ width: '13rem' }}
